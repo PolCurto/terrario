@@ -8,7 +8,7 @@ bool Window::Create()
 {
 	window = SDL_CreateWindow(
 		"Terrario",
-		800, 600,
+		1920, 1080,
 		SDL_WINDOW_RESIZABLE
 	);
 
@@ -43,4 +43,9 @@ void Window::RenderRect(const SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, 
 {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderRect(renderer, &rect);
+}
+
+void Window::RenderDebugText(const std::string& text, float x, float y)
+{
+	SDL_RenderDebugText(renderer, x, y, text.c_str());
 }
