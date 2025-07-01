@@ -1,16 +1,20 @@
 #include "Engine.h"
 #include "Entity.h"
 #include "RendererComponent.h"
+#include "CharacterController.h"
 
 #include <SDL3/SDL.h>
 #include <iostream>
 
 int main()
 {
-	std::cout << "Hello World" << std::endl;
 
     // Initialize SDL3
     if (!SDL_Init(SDL_INIT_VIDEO)) {
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return 0;
+    }
+    if (!SDL_Init(SDL_INIT_EVENTS)) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 0;
     }
@@ -23,17 +27,22 @@ int main()
         return 0;
     }
 
-    // Event loop
+    // Main loop
     bool running = true;
     SDL_Event event;
 
     Entity test;
-    test.AddComponent(new RendererComponent());
+    RendererComponent* rc = new RendererComponent();
+    rc->SetEntity(&test);
+    test.AddComponent(rc);
+    
+    CharacterController* ch = new CharacterController();
+    ch->SetEntity(&test);
+    test.AddComponent(ch);
 
-    // TODO: Create a struct that has the window (and other Engine that will arise). This struct will be passes to the Update of a Game class, which has the scenes, which have the entities (and maybe systems)
+    // TODO: Create a struct that has the window (and other Engine that will arise). This struct will be passed to the Update of a Game class, which has the scenes, which have the entities (and maybe systems)
 
     uint64_t lastTick = 0;
-    uint64_t freq = SDL_GetPerformanceFrequency();;
     float preciseTimer = 0;
 
     while (running) {
@@ -41,6 +50,8 @@ int main()
         float deltaTime = (float)(SDL_GetTicksNS() - lastTick) / 1000000.0f;
         preciseTimer += deltaTime;
         lastTick = SDL_GetTicksNS();
+
+        engine.inputs.Update();
 
         test.Update(engine);
         engine.window.RenderDebugText("FPS: " + std::to_string(1000.0f / deltaTime) ,5.0f, 5.0f);
@@ -55,7 +66,12 @@ int main()
         }
     }
 
+
     engine.window.Destroy();
+
+    // Quit SDL3
+    SDL_QuitSubSystem(SDL_INIT_EVENTS);
+    SDL_QuitSubSystem(SDL_INIT_VIDEO);
     SDL_Quit();
 
 	return 0;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IComponent.h"
+#include "Vector2.h"
 
 #include <vector>
 
@@ -12,5 +13,7 @@ struct Entity
 
 	void AddComponent(IComponent* newComponent);
 
+
+	Vector2 position;
 	std::vector<IComponent*> components;
 };
