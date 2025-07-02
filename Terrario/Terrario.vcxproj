@@ -135,19 +135,24 @@
   <ItemGroup>
     <ClCompile Include="CharacterController.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Inputs.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RendererComponent.cpp" />
-    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CharacterController.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Inputs.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="RendererComponent.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

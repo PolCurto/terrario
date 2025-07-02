@@ -13,8 +13,8 @@ struct RendererComponent : IComponent
 	void Update(const Engine& engine) override;
 	bool Close() override;
 
-	void SetEntity(Entity* parent) { entity = parent; };
-
 	Entity* entity = nullptr;
 	SDL_Texture* texture = nullptr;
+
+	float parallaxFactor = 1.0f;
 };

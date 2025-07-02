@@ -1,6 +1,16 @@
 #include "Inputs.h"
 
-#include <SDL3/SDL_events.h>
+#include <SDL3/SDL.h>
+#include <iostream>
+
+bool Inputs::Create()
+{
+	if (!SDL_Init(SDL_INIT_EVENTS)) {
+		std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		return 0;
+	}
+
+}
 
 bool Inputs::Update()
 {
@@ -15,5 +25,11 @@ bool Inputs::Update()
 	}
 
 	keyboard = SDL_GetKeyboardState(NULL);
+	return true;
+}
+
+bool Inputs::Destroy()
+{
+	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

@@ -12,15 +12,14 @@ bool RendererComponent::Init()
 
 void RendererComponent::Update(const Engine& engine)
 {
-	SDL_SetRenderDrawColor(engine.window.renderer, 255, 255, 255, 255);
-
 	SDL_FRect rectangle{};
-	rectangle.x = entity->position.x;
-	rectangle.y = entity->position.y;
-	rectangle.h = 40.0f;
+	rectangle.x = entity->position.x - (engine.renderer.camera_pos.x / parallaxFactor) + static_cast<float>(WINDOW_WIDTH) / 2;
+	rectangle.y = entity->position.y - (engine.renderer.camera_pos.y / parallaxFactor) + static_cast<float>(WINDOW_HEIGHT) / 2;
+	rectangle.h = 40.0f; 
 	rectangle.w = 40.0f;
 
-	SDL_RenderFillRect(engine.window.renderer, &rectangle);
+	//TODO: remove SDL_Frect tyoe from here, pass to the render function the position and widht/height (We will see if that fits with textures)
+	engine.renderer.RenderRect(rectangle, 0xFF, 0xFF, 0xFF, 0xFF);
 }
 
 bool RendererComponent::Close()

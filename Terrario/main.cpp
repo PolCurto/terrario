@@ -1,44 +1,25 @@
 #include "Engine.h"
 #include "Entity.h"
-#include "RendererComponent.h"
-#include "CharacterController.h"
+#include "Game.h"
 
 #include <SDL3/SDL.h>
-#include <iostream>
 
 int main()
 {
-
-    // Initialize SDL3
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return 0;
-    }
-    if (!SDL_Init(SDL_INIT_EVENTS)) {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return 0;
-    }
-
+    // Init engine modules
     Engine engine;
-    if (!engine.window.Create())
+    if (!engine.window.Create() || !engine.renderer.Create(engine.window.sdl_window) || !engine.inputs.Create())
     {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
         return 0;
     }
 
+    // Init game
+    Game game;
+
     // Main loop
     bool running = true;
     SDL_Event event;
-
-    Entity test;
-    RendererComponent* rc = new RendererComponent();
-    rc->SetEntity(&test);
-    test.AddComponent(rc);
-    
-    CharacterController* ch = new CharacterController();
-    ch->SetEntity(&test);
-    test.AddComponent(ch);
 
     // TODO: Create a struct that has the window (and other Engine that will arise). This struct will be passed to the Update of a Game class, which has the scenes, which have the entities (and maybe systems)
 
@@ -47,17 +28,22 @@ int main()
 
     while (running) {
 
+        // Timer
         float deltaTime = (float)(SDL_GetTicksNS() - lastTick) / 1000000.0f;
         preciseTimer += deltaTime;
         lastTick = SDL_GetTicksNS();
 
+        // Inputs
         engine.inputs.Update();
+        
+        // Game Update
+        game.Update(engine);
 
-        test.Update(engine);
-        engine.window.RenderDebugText("FPS: " + std::to_string(1000.0f / deltaTime) ,5.0f, 5.0f);
-        engine.window.RenderDebugText("ms: " + std::to_string(deltaTime), 200.0f, 5.0f);
-        engine.window.RenderDebugText("time elapsed: " + std::to_string(preciseTimer / 1000.0f), 400.0f, 5.0f);
-        engine.window.Render();
+        // Render
+        engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / deltaTime) ,5.0f, 5.0f);
+        engine.renderer.RenderDebugText("ms: " + std::to_string(deltaTime), 200.0f, 5.0f);
+        engine.renderer.RenderDebugText("time elapsed: " + std::to_string(preciseTimer / 1000.0f), 400.0f, 5.0f);
+        engine.renderer.Render();
 
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
@@ -66,12 +52,11 @@ int main()
         }
     }
 
-
+    engine.inputs.Destroy();
+    engine.renderer.Destroy();
     engine.window.Destroy();
 
     // Quit SDL3
-    SDL_QuitSubSystem(SDL_INIT_EVENTS);
-    SDL_QuitSubSystem(SDL_INIT_VIDEO);
     SDL_Quit();
 
 	return 0;

@@ -27,6 +27,10 @@ void CharacterController::Update(const Engine& engine)
 	{
 		entity->position.x += 0.01f;
 	}
+
+	// TODO: Fix this SHIT XD
+	Engine& xd = const_cast<Engine&>(engine);
+	xd.renderer.camera_pos = entity->position;
 }
 
 bool CharacterController::Close()
