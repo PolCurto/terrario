@@ -3,6 +3,14 @@
 #include "Game.h"
 
 #include <SDL3/SDL.h>
+#include <array>
+#include <iostream>
+
+struct Tile
+{
+    int type = 0;
+};
+
 
 int main()
 {
@@ -23,15 +31,31 @@ int main()
 
     // TODO: Create a struct that has the window (and other Engine that will arise). This struct will be passed to the Update of a Game class, which has the scenes, which have the entities (and maybe systems)
 
-    uint64_t lastTick = 0;
-    float preciseTimer = 0;
+    const int mapWidth = 8400;
+    const int mapHeight = 2200;
+    const int mapSize = mapWidth * mapHeight;
+    Tile* tiles = new Tile[mapSize];
 
-    while (running) {
+    engine.timer.Tick();
 
+    for (int x = 0; x < mapWidth; ++x)
+    {
+        for (int y = 0; y < mapHeight; ++y)
+        {
+            if (y - mapHeight / 2 > 0)
+            {
+               tiles[mapWidth * y + x].type = 1;
+            }
+        }
+    }
+
+    engine.timer.Tick();
+    std::cout << "World gen time: " << engine.timer.delta_time << std::endl;
+
+    while (running) 
+    {
         // Timer
-        float deltaTime = (float)(SDL_GetTicksNS() - lastTick) / 1000000.0f;
-        preciseTimer += deltaTime;
-        lastTick = SDL_GetTicksNS();
+        engine.timer.Tick();
 
         // Inputs
         engine.inputs.Update();
@@ -39,10 +63,18 @@ int main()
         // Game Update
         game.Update(engine);
 
+        for (int x = 0; x < mapWidth; ++x)
+        {
+            for (int y = 0; y < mapHeight; ++y)
+            {
+                
+            }
+        }
+
         // Render
-        engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / deltaTime) ,5.0f, 5.0f);
-        engine.renderer.RenderDebugText("ms: " + std::to_string(deltaTime), 200.0f, 5.0f);
-        engine.renderer.RenderDebugText("time elapsed: " + std::to_string(preciseTimer / 1000.0f), 400.0f, 5.0f);
+        engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / engine.timer.delta_time) ,5.0f, 5.0f);
+        engine.renderer.RenderDebugText("ms: " + std::to_string(engine.timer.delta_time), 200.0f, 5.0f);
+        engine.renderer.RenderDebugText("time elapsed: " + std::to_string(engine.timer.elapsed_time / 1000.0f), 400.0f, 5.0f);
         engine.renderer.Render();
 
         while (SDL_PollEvent(&event)) {
@@ -51,6 +83,8 @@ int main()
             }
         }
     }
+
+    delete[] tiles;
 
     engine.inputs.Destroy();
     engine.renderer.Destroy();

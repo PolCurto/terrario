@@ -12,4 +12,7 @@ struct CharacterController : IComponent
 	void SetEntity(Entity* parent) { entity = parent; }
 
 	Entity* entity = nullptr;
+
+	float speed = 1000.0f;
+	Vector2 direction;
 };

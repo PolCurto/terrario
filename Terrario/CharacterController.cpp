@@ -3,6 +3,7 @@
 #include "Engine.h"
 
 #include <SDL3/SDL_scancode.h>
+#include <iostream>
 
 bool CharacterController::Init()
 {
@@ -11,22 +12,27 @@ bool CharacterController::Init()
 
 void CharacterController::Update(Engine& engine)
 {
+	direction.x = 0;
+	direction.y = 0;
+
 	if (engine.inputs.keyboard[SDL_SCANCODE_W])
 	{ 
-		entity->position.y -= 0.01f;
+		direction.y -= 1;
 	}
 	if (engine.inputs.keyboard[SDL_SCANCODE_A])
 	{
-		entity->position.x -= 0.01f;
+		direction.x -= 1;
 	}
 	if (engine.inputs.keyboard[SDL_SCANCODE_S])
 	{
-		entity->position.y += 0.01f;
+		direction.y += 1;
 	}
 	if (engine.inputs.keyboard[SDL_SCANCODE_D])
 	{
-		entity->position.x += 0.01f;
+		direction.x += 1;
 	}
+
+	entity->position += direction * speed * (engine.timer.delta_time / 1000.0f);
 }
 
 bool CharacterController::Close()
