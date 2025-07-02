@@ -15,7 +15,7 @@ int main()
     }
 
     // Init game
-    Game game;
+    Game game(engine);
 
     // Main loop
     bool running = true;

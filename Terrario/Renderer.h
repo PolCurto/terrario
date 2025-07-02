@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <string>
 
+struct CameraComponent;
+
 struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_FRect;
@@ -15,11 +17,10 @@ struct Renderer
 	void Destroy();
 
 	void Render();
-	void RenderRect(const SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a) const;
+	void RenderRect(SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor = 1.0f) const;
 	void RenderDebugText(const std::string& text, float x, float y) const;
 
 	SDL_Renderer* sdl_renderer = nullptr;
 
-	// TODO: Maybe in the future this needs a full camera class?
-	Vector2 camera_pos;
+	CameraComponent* camera;
 };

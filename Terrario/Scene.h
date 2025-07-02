@@ -10,7 +10,7 @@ struct Scene
 {
 	bool Load();
 	bool Unload();
-	void Update(const Engine& engine);
+	void Update(Engine& engine);
 
 	std::vector<Entity*> entities;
 };

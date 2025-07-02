@@ -10,7 +10,7 @@ struct Engine;
 
 struct Entity
 {
-	void Update(const Engine& Engine);
+	void Update(Engine& engine);
 
 	void AddChild(Entity* newChild) { children.push_back(newChild); }
 	void AddComponent(IComponent* newComponent);

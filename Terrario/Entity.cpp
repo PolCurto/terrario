@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-void Entity::Update(const Engine& engine)
+void Entity::Update(Engine& engine)
 {
 	for (IComponent* component : components)
 	{

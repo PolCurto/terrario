@@ -10,7 +10,7 @@ struct SDL_Texture;
 struct RendererComponent : IComponent
 {
 	bool Init() override;
-	void Update(const Engine& engine) override;
+	void Update(Engine& engine) override;
 	bool Close() override;
 
 	Entity* entity = nullptr;

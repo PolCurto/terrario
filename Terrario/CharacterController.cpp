@@ -9,10 +9,10 @@ bool CharacterController::Init()
 	return true;
 }
 
-void CharacterController::Update(const Engine& engine)
+void CharacterController::Update(Engine& engine)
 {
 	if (engine.inputs.keyboard[SDL_SCANCODE_W])
-	{
+	{ 
 		entity->position.y -= 0.01f;
 	}
 	if (engine.inputs.keyboard[SDL_SCANCODE_A])
@@ -27,10 +27,6 @@ void CharacterController::Update(const Engine& engine)
 	{
 		entity->position.x += 0.01f;
 	}
-
-	// TODO: Fix this SHIT XD
-	Engine& xd = const_cast<Engine&>(engine);
-	xd.renderer.camera_pos = entity->position;
 }
 
 bool CharacterController::Close()

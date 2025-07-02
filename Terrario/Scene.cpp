@@ -12,7 +12,7 @@ bool Scene::Unload()
 	return true;
 }
 
-void Scene::Update(const Engine& engine)
+void Scene::Update(Engine& engine)
 {
 	for (Entity* ent : entities)
 	{

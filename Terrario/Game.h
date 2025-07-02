@@ -7,10 +7,10 @@ struct Engine;
 
 struct Game
 {
-	Game();
+	Game(Engine& engine);
 	~Game();
 
-	void Update(const Engine& engine);
+	void Update(Engine& engine);
 
 
 	std::vector<Scene*> scenes{};

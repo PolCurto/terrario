@@ -3,9 +3,10 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "RendererComponent.h"
+#include "CameraComponent.h"
 #include "CharacterController.h"
 
-Game::Game()
+Game::Game(Engine& engine)
 {
 	Scene* level1 = new Scene();
 
@@ -21,6 +22,12 @@ Game::Game()
 		CharacterController* ch = new CharacterController();
 		ch->entity = player;
 		player->AddComponent(ch);
+
+		CameraComponent* cam = new CameraComponent();
+		cam->entity = player;
+		cam->SetAsMainCamera(engine);
+		player->AddComponent(cam);
+
 
 		level1->entities.push_back(player);
 	}
@@ -65,7 +72,7 @@ Game::~Game()
 	scenes.clear();
 }
 
-void Game::Update(const Engine& engine)
+void Game::Update(Engine& engine)
 {
 	activeScene->Update(engine);
 }

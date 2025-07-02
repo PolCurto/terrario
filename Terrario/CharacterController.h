@@ -6,7 +6,7 @@
 struct CharacterController : IComponent
 {
 	bool Init() override;
-	void Update(const Engine& engine) override;
+	void Update(Engine&	engine) override;
 	bool Close() override;
 
 	void SetEntity(Entity* parent) { entity = parent; }
