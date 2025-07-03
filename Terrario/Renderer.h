@@ -17,7 +17,7 @@ struct Renderer
 	void Destroy();
 
 	void Render();
-	void RenderRect(SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor = 1.0f) const;
+	void RenderRect(SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor = 1.0f, bool fill = true) const;
 	void RenderDebugText(const std::string& text, float x, float y) const;
 
 	SDL_Renderer* sdl_renderer = nullptr;

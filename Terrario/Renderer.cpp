@@ -30,15 +30,18 @@ void Renderer::Render()
 	SDL_RenderClear(sdl_renderer);
 }
 
-void Renderer::RenderRect(SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor) const
+void Renderer::RenderRect(SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor, bool fill) const
 {
 	SDL_SetRenderDrawColor(sdl_renderer, r, g, b, a);
 
-	// Move according to the camera
-	rect.x = rect.x - camera->GetPosition().x * parallaxFactor + static_cast<float>(WINDOW_WIDTH) / 2;
-	rect.y = rect.y - camera->GetPosition().y * parallaxFactor + static_cast<float>(WINDOW_HEIGHT) / 2;
+	SDL_FRect newRect = rect;
 
-	SDL_RenderFillRect(sdl_renderer, &rect);
+	// Move according to the camera
+	newRect.x = rect.x - camera->GetPosition().x * parallaxFactor + static_cast<float>(WINDOW_WIDTH) / 2;
+	newRect.y = rect.y - camera->GetPosition().y * parallaxFactor + static_cast<float>(WINDOW_HEIGHT) / 2;
+
+	if (fill) SDL_RenderFillRect(sdl_renderer, &newRect);
+	else SDL_RenderRect(sdl_renderer, &newRect);
 }
 
 void Renderer::RenderDebugText(const std::string& text, float x, float y) const

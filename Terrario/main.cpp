@@ -6,9 +6,14 @@
 #include <array>
 #include <iostream>
 
+#include <SDL3/Sdl_render.h>
+
+
+//TODO: This can be a SoA?
 struct Tile
 {
     int type = 0;
+    SDL_FRect rect{};
 };
 
 
@@ -42,6 +47,8 @@ int main()
     {
         for (int y = 0; y < mapHeight; ++y)
         {
+            tiles[mapWidth * y + x].rect = { (float)x * 16 - mapWidth * 8, (float)y * 16 - mapHeight * 8, 16.0f, 16.0f };
+
             if (y - mapHeight / 2 > 0)
             {
                tiles[mapWidth * y + x].type = 1;
@@ -61,15 +68,42 @@ int main()
         engine.inputs.Update();
         
         // Game Update
-        game.Update(engine);
 
+        uint8_t r = 0;
+        uint8_t g = 0;
+        uint8_t b = 0;
         for (int x = 0; x < mapWidth; ++x)
         {
             for (int y = 0; y < mapHeight; ++y)
             {
-                
+                if (x - mapWidth / 2 > -60 && x - mapWidth / 2 < 60 && y - mapHeight / 2 > -35 && y - mapHeight / 2 < 35)
+                {
+                    switch (tiles[y * mapWidth + x].type)
+                    {
+                    case 0:
+                    {
+                        r = 0;
+                        g = 50;
+                        b = 200;
+                        break;
+                    }
+                    case 1:
+                    {
+                        r = 50;
+                        g = 200;
+                        b = 0;
+                    }
+                    }
+
+                    //TODO: Pass here the position (probably calculated through the array pos) so no need tyo store so many SDL_FRects
+                    engine.renderer.RenderRect(tiles[y * mapWidth + x].rect, r, g, b, 255, 1.0f, false);
+                }
+
             }
         }
+
+        game.Update(engine);
+
 
         // Render
         engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / engine.timer.delta_time) ,5.0f, 5.0f);
