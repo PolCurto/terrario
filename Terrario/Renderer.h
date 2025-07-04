@@ -9,6 +9,7 @@ struct CameraComponent;
 
 struct SDL_Window;
 struct SDL_Renderer;
+struct SDL_Texture;
 struct SDL_FRect;
 
 struct Renderer
@@ -16,11 +17,13 @@ struct Renderer
 	bool Create(SDL_Window* window);
 	void Destroy();
 
-	void Render();
+	void PreRender() const;
+	void Render() const;
 	void RenderRect(SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor = 1.0f, bool fill = true) const;
 	void RenderDebugText(const std::string& text, float x, float y) const;
 
 	SDL_Renderer* sdl_renderer = nullptr;
+	SDL_Texture* render_texture = nullptr;
 
 	CameraComponent* camera;
 };

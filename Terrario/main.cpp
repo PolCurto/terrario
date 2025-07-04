@@ -34,10 +34,10 @@ int main()
     bool running = true;
     SDL_Event event;
 
-    // TODO: Create a struct that has the window (and other Engine that will arise). This struct will be passed to the Update of a Game class, which has the scenes, which have the entities (and maybe systems)
+    // TODO: Move all the tiles and texture logics from main. Right now is here for fast testing of how things work
 
     const int mapWidth = 8400;
-    const int mapHeight = 2200;
+    const int mapHeight = 2400;
     const int mapSize = mapWidth * mapHeight;
     Tile* tiles = new Tile[mapSize];
 
@@ -68,6 +68,7 @@ int main()
         engine.inputs.Update();
         
         // Game Update
+        engine.renderer.PreRender();
 
         uint8_t r = 0;
         uint8_t g = 0;
@@ -76,7 +77,7 @@ int main()
         {
             for (int y = 0; y < mapHeight; ++y)
             {
-                if (x - mapWidth / 2 > -60 && x - mapWidth / 2 < 60 && y - mapHeight / 2 > -35 && y - mapHeight / 2 < 35)
+                if (x - mapWidth / 2 > -60 && x - mapWidth / 2 < 60 && y - mapHeight / 2 > -34 && y - mapHeight / 2 < 34)
                 {
                     switch (tiles[y * mapWidth + x].type)
                     {

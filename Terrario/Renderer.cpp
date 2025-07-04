@@ -15,6 +15,9 @@ bool Renderer::Create(SDL_Window* window)
 		std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
+
+	render_texture = SDL_CreateTexture(sdl_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1920, 1080);
+	SDL_SetRenderTarget(sdl_renderer, render_texture);
 }
 
 void Renderer::Destroy()
@@ -22,12 +25,21 @@ void Renderer::Destroy()
 	SDL_DestroyRenderer(sdl_renderer);
 }
 
-void Renderer::Render()
+void Renderer::PreRender() const
 {
-	SDL_RenderPresent(sdl_renderer);
-
+	SDL_SetRenderTarget(sdl_renderer, render_texture);
 	SDL_SetRenderDrawColor(sdl_renderer, 100, 100, 100, 255);
+
 	SDL_RenderClear(sdl_renderer);
+}
+
+void Renderer::Render() const
+{
+	SDL_SetRenderTarget(sdl_renderer, NULL);
+	SDL_RenderClear(sdl_renderer);
+
+	SDL_RenderTexture(sdl_renderer, render_texture, NULL, NULL);
+	SDL_RenderPresent(sdl_renderer);
 }
 
 void Renderer::RenderRect(SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor, bool fill) const
