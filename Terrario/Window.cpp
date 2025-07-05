@@ -1,7 +1,8 @@
 #include "Window.h"
 
-#include <SDL3/SDL.h>
+#include "Globals.h"
 
+#include <SDL3/SDL.h>
 #include <iostream>
 
 bool Window::Create()
@@ -13,7 +14,7 @@ bool Window::Create()
 
 	sdl_window = SDL_CreateWindow(
 		"Terrario",
-		WINDOW_WIDTH, WINDOW_HEIGHT,
+		Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT,
 		SDL_WINDOW_RESIZABLE
 	);
 
@@ -22,6 +23,8 @@ bool Window::Create()
 		std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
+
+	return true;
 }
 
 void Window::Destroy()

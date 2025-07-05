@@ -6,14 +6,13 @@
 #include <array>
 #include <iostream>
 
-#include <SDL3/Sdl_render.h>
-
+#include <SDL3_image/SDL_image.h>
 
 //TODO: This can be a SoA?
 struct Tile
 {
     int type = 0;
-    SDL_FRect rect{};
+    SDL_FRect pos{};
 };
 
 
@@ -23,6 +22,7 @@ int main()
     Engine engine;
     if (!engine.window.Create() || !engine.renderer.Create(engine.window.sdl_window) || !engine.inputs.Create())
     {
+        std::cerr << "Error on creating SDL" << std::endl;
         SDL_Quit();
         return 0;
     }
@@ -47,7 +47,7 @@ int main()
     {
         for (int y = 0; y < mapHeight; ++y)
         {
-            tiles[mapWidth * y + x].rect = { (float)x * 16 - mapWidth * 8, (float)y * 16 - mapHeight * 8, 16.0f, 16.0f };
+            tiles[mapWidth * y + x].pos = { (float)x * 16 - mapWidth * 8, (float)y * 16 - mapHeight * 8, 16.0f, 16.0f };
 
             if (y - mapHeight / 2 > 0)
             {
@@ -56,8 +56,16 @@ int main()
         }
     }
 
+    SDL_Texture* tiles_texture = engine.renderer.LoadTexture("Textures/tiles.png");
+
     engine.timer.Tick();
     std::cout << "World gen time: " << engine.timer.delta_time << std::endl;
+
+    SDL_FRect algo{};
+    algo.x = 32.0f;
+    algo.y = 0.0f;
+    algo.w = 32.0f;
+    algo.h = 32.0f;
 
     while (running) 
     {
@@ -82,22 +90,16 @@ int main()
                     switch (tiles[y * mapWidth + x].type)
                     {
                     case 0:
-                    {
-                        r = 0;
-                        g = 50;
-                        b = 200;
+                        engine.renderer.RenderRect(tiles[y * mapWidth + x].pos, 0, 50, 200, 255, 1.0f, false);
+                        //engine.renderer.RenderTexture(tiles_texture, { 0, 32.0f, 32.0f, 32.0f }, { tiles[y * mapWidth + x].pos.x, tiles[y * mapWidth + x].pos.y, 16.0f, 16.0f }, 1.0f);
+                        break;
+                    case 1:
+                        //engine.renderer.RenderRect(tiles[y * mapWidth + x].pos, 50, 200, 0, 255, 1.0f, true);
+                        engine.renderer.RenderTexture(tiles_texture, algo, tiles[y * mapWidth + x].pos, 1.0f);
+
                         break;
                     }
-                    case 1:
-                    {
-                        r = 50;
-                        g = 200;
-                        b = 0;
-                    }
-                    }
-
-                    //TODO: Pass here the position (probably calculated through the array pos) so no need tyo store so many SDL_FRects
-                    engine.renderer.RenderRect(tiles[y * mapWidth + x].rect, r, g, b, 255, 1.0f, false);
+                    
                 }
 
             }

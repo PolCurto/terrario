@@ -7,9 +7,10 @@ bool Inputs::Create()
 {
 	if (!SDL_Init(SDL_INIT_EVENTS)) {
 		std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		return 0;
+		return false;
 	}
 
+	return true;
 }
 
 bool Inputs::Update()

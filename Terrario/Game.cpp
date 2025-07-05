@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include "Engine.h"
 #include "Scene.h"
 #include "Entity.h"
 #include "RendererComponent.h"
@@ -17,6 +18,7 @@ Game::Game(Engine& engine)
 	
 		RendererComponent* rc = new RendererComponent();
 		rc->entity = player;
+		rc->texture = engine.renderer.LoadTexture("playersprite.png");
 		player->AddComponent(rc);
 
 		CharacterController* ch = new CharacterController();
