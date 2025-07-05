@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Entity.h"
 #include "IComponent.h"
 #include "Vector2.h"
 
@@ -14,7 +15,7 @@ struct CameraComponent : IComponent
 	bool Close() override { return true; };
 
 	void SetAsMainCamera(Engine& engine);
-	const Vector2& GetPosition() const;
+	const Vector2& GetPosition() const { return entity->position; };
 
 	Entity* entity = nullptr;
 };

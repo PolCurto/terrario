@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Vector2.h"
+#include "CameraComponent.h"
 
 #include <stdint.h>
 #include <string>
 #include <vector>
-
-struct CameraComponent;
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -26,6 +25,8 @@ struct Renderer
 
 	SDL_Texture* LoadTexture(const char* filepath) const;
 	void UnloadTexture(const SDL_Texture* texture);
+
+	const Vector2& GetCameraPos() const { return camera->GetPosition(); }
 
 	SDL_Renderer* sdl_renderer = nullptr;
 	SDL_Texture* render_texture = nullptr;

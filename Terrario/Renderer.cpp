@@ -70,8 +70,8 @@ void Renderer::RenderTexture(SDL_Texture* texture, const SDL_FRect& source, cons
 	SDL_FRect newRect = destination;
 
 	// Move according to the camera
-	newRect.x = destination.x  * parallaxFactor + static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / 2;
-	newRect.y = destination.y  * parallaxFactor + static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / 2;
+	newRect.x = destination.x - camera->GetPosition().x * parallaxFactor + static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / 2;
+	newRect.y = destination.y - camera->GetPosition().y * parallaxFactor + static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / 2;
 
 	SDL_RenderTexture(sdl_renderer, texture, &source, &newRect);
 }

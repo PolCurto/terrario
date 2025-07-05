@@ -15,11 +15,11 @@ void RendererComponent::Update(Engine& engine)
 	SDL_FRect rectangle{};
 	rectangle.x = entity->position.x;
 	rectangle.y = entity->position.y;
-	rectangle.h = 40.0f; 
-	rectangle.w = 40.0f;
+	rectangle.w = 32.0f;
+	rectangle.h = 64.0f;
 
 	//TODO: remove SDL_Frect tyoe from here, pass to the render function the position and widht/height (We will see if that fits with textures)
-	engine.renderer.RenderRect(rectangle, 0xFF, 0xFF, 0xFF, 0xFF, parallaxFactor);
+	engine.renderer.RenderTexture(texture, { 0.0f, 0.0f, 32.0f, 64.0f }, rectangle, parallaxFactor);
 }
 
 bool RendererComponent::Close()

@@ -34,27 +34,7 @@ int main()
     bool running = true;
     SDL_Event event;
 
-    // TODO: Move all the tiles and texture logics from main. Right now is here for fast testing of how things work
-
-    const int mapWidth = 8400;
-    const int mapHeight = 2400;
-    const int mapSize = mapWidth * mapHeight;
-    Tile* tiles = new Tile[mapSize];
-
     engine.timer.Tick();
-
-    for (int x = 0; x < mapWidth; ++x)
-    {
-        for (int y = 0; y < mapHeight; ++y)
-        {
-            tiles[mapWidth * y + x].pos = { (float)x * 16 - mapWidth * 8, (float)y * 16 - mapHeight * 8, 16.0f, 16.0f };
-
-            if (y - mapHeight / 2 > 0)
-            {
-               tiles[mapWidth * y + x].type = 1;
-            }
-        }
-    }
 
     SDL_Texture* tiles_texture = engine.renderer.LoadTexture("Textures/tiles.png");
 
@@ -78,37 +58,10 @@ int main()
         // Game Update
         engine.renderer.PreRender();
 
-        uint8_t r = 0;
-        uint8_t g = 0;
-        uint8_t b = 0;
-        for (int x = 0; x < mapWidth; ++x)
-        {
-            for (int y = 0; y < mapHeight; ++y)
-            {
-                if (x - mapWidth / 2 > -60 && x - mapWidth / 2 < 60 && y - mapHeight / 2 > -34 && y - mapHeight / 2 < 34)
-                {
-                    switch (tiles[y * mapWidth + x].type)
-                    {
-                    case 0:
-                        engine.renderer.RenderRect(tiles[y * mapWidth + x].pos, 0, 50, 200, 255, 1.0f, false);
-                        //engine.renderer.RenderTexture(tiles_texture, { 0, 32.0f, 32.0f, 32.0f }, { tiles[y * mapWidth + x].pos.x, tiles[y * mapWidth + x].pos.y, 16.0f, 16.0f }, 1.0f);
-                        break;
-                    case 1:
-                        //engine.renderer.RenderRect(tiles[y * mapWidth + x].pos, 50, 200, 0, 255, 1.0f, true);
-                        engine.renderer.RenderTexture(tiles_texture, algo, tiles[y * mapWidth + x].pos, 1.0f);
-
-                        break;
-                    }
-                    
-                }
-
-            }
-        }
-
         game.Update(engine);
 
-
         // Render
+        SDL_SetRenderDrawColor(engine.renderer.sdl_renderer, 255, 255, 255, 255);
         engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / engine.timer.delta_time) ,5.0f, 5.0f);
         engine.renderer.RenderDebugText("ms: " + std::to_string(engine.timer.delta_time), 200.0f, 5.0f);
         engine.renderer.RenderDebugText("time elapsed: " + std::to_string(engine.timer.elapsed_time / 1000.0f), 400.0f, 5.0f);
@@ -120,8 +73,6 @@ int main()
             }
         }
     }
-
-    delete[] tiles;
 
     engine.inputs.Destroy();
     engine.renderer.Destroy();

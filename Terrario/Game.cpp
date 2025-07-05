@@ -18,7 +18,7 @@ Game::Game(Engine& engine)
 	
 		RendererComponent* rc = new RendererComponent();
 		rc->entity = player;
-		rc->texture = engine.renderer.LoadTexture("playersprite.png");
+		rc->texture = engine.renderer.LoadTexture("Textures/playersprite.png");
 		player->AddComponent(rc);
 
 		CharacterController* ch = new CharacterController();
@@ -34,33 +34,8 @@ Game::Game(Engine& engine)
 		level1->entities.push_back(player);
 	}
 
-	/* Blocks */
-	// Block 1
-	{
-		Entity* block = new Entity();
-		block->name = "block";
-
-		RendererComponent* rc = new RendererComponent();
-		rc->entity = block;
-		block->AddComponent(rc);
-		block->position.x = -200.0f;
-		block->position.y = -300.0f;
-		level1->entities.push_back(block);
-	}
-
-	// Block 2
-	{
-		Entity* block = new Entity();
-		block->name = "block2";
-
-		RendererComponent* rc = new RendererComponent();
-		rc->entity = block;
-		rc->parallaxFactor = 1.5f;
-		block->AddComponent(rc);
-		block->position.x = 300.0f;
-		block->position.y = 100.0f;
-		level1->entities.push_back(block);
-	}
+	tile_system.CreateTilesArray();
+	tile_system.tiles_texture = engine.renderer.LoadTexture("Textures/tiles.png");
 
 	activeScene = level1;
 }
@@ -72,9 +47,12 @@ Game::~Game()
 		delete scene;
 	}
 	scenes.clear();
+
+	tile_system.DeleteTilesArray();
 }
 
 void Game::Update(Engine& engine)
 {
+	tile_system.Update(engine);
 	activeScene->Update(engine);
 }
