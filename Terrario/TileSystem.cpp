@@ -1,27 +1,27 @@
 #include "TileSystem.h"
 
 #include "Engine.h"
+#include "Globals.h"
 
 #include "SDL3/SDL_rect.h"
 
 void TileSystem::CreateTilesArray()
 {
-    tilemap.type = new int[worldSize];
-    tilemap.pos = new Vector2[worldSize];
+    tilemap = new Tile[TILEMAP_SIZE];
 
-    for (int x = 0; x < worldWidth; ++x)
+    for (int x = 0; x < TILEMAP_WIDTH; ++x)
     {
-        for (int y = 0; y < worldHeight; ++y)
+        for (int y = 0; y < TILEMAP_HEIGHT; ++y)
         {
-            tilemap.pos[worldWidth * y + x] = { static_cast<float>(x * 16 - worldWidth * 8), static_cast<float>(y * 16 - worldHeight * 8) };
+            tilemap[TILEMAP_WIDTH * y + x].pos = { static_cast<float>(x * 16 - TILEMAP_WIDTH * 8), static_cast<float>(y * 16 - TILEMAP_HEIGHT * 8) };
 
-            if (y - worldHeight / 2 > 0)
+            if (y - TILEMAP_HEIGHT / 2 > 0)
             {
-                tilemap.type[worldWidth * y + x] = 1;
+                tilemap[TILEMAP_WIDTH * y + x].type = 1;
             }
             else
             {
-                tilemap.type[worldWidth * y + x] = 0;
+                tilemap[TILEMAP_WIDTH * y + x].type = 0;
             }
         }
     }
@@ -29,38 +29,47 @@ void TileSystem::CreateTilesArray()
 
 void TileSystem::DeleteTilesArray()
 {
-    delete[] tilemap.pos;
-    delete[] tilemap.type;
+    delete[] tilemap;
 }
 
 void TileSystem::Update(Engine& engine)
 {
-    int x_bounds =  engine.renderer.GetCameraPos().x;
-    int y_bounds =  engine.renderer.GetCameraPos().y;
 
-    //int x_upper_bound = engine.renderer.GetCameraPos().x + Globals::WINDOW_WIDTH / 2;
-    //int x_lower_bound = engine.renderer.GetCameraPos().x - Globals::WINDOW_WIDTH / 2;
-    //
-    //int y_upper_bound = engine.renderer.GetCameraPos().y + Globals::WINDOW_HEIGHT / 2;
-    //int y_lower_bound = engine.renderer.GetCameraPos().y - Globals::WINDOW_HEIGHT / 2;
+    // To update the tiles we need chunks
 
-    for (int x = 0; x < worldWidth; ++x)
+    // Tiles render
+    int x_upper_bound = engine.renderer.GetCameraPos().x + Globals::WINDOW_WIDTH / 2;
+    int x_lower_bound = engine.renderer.GetCameraPos().x - Globals::WINDOW_WIDTH / 2;
+    
+    int y_upper_bound = engine.renderer.GetCameraPos().y + Globals::WINDOW_HEIGHT / 2;
+    int y_lower_bound = engine.renderer.GetCameraPos().y - Globals::WINDOW_HEIGHT / 2;
+
+    int tilesRendered = 0;
+    
+    WorldToTilePos(&x_upper_bound, &y_upper_bound);
+    WorldToTilePos(&x_lower_bound, &y_lower_bound);
+
+    // + 1 to avoid not rendering in border (float to int type o sht)
+    ++x_upper_bound;
+    ++y_upper_bound;
+
+    // Iterate only through visible tiles (from ~20M to ~8K)
+    for (int x = x_lower_bound; x < x_upper_bound; ++x)
     {
-        for (int y = 0; y < worldHeight; ++y)
+        for (int y = y_lower_bound; y < y_upper_bound; ++y)
         {
-            if (x - worldWidth / 2 -  x_bounds > -60 && x - worldWidth / 2 - x_bounds < 60 && y - worldHeight / 2 - y_bounds > -34 && y - worldHeight / 2 - y_bounds < 34)
+            ++tilesRendered;
+            switch (tilemap[y * TILEMAP_WIDTH + x].type)
             {
-                switch (tilemap.type[y * worldWidth + x])
-                {
-                case 0:
-                    engine.renderer.RenderTexture(tiles_texture, { 0, 32.0f, 32.0f, 32.0f }, { tilemap.pos[y * worldWidth + x].x, tilemap.pos[y * worldWidth + x].y, 16.0f, 16.0f }, 1.0f);
-                    break;
-                case 1:
-                    engine.renderer.RenderTexture(tiles_texture, { 32.0f, 0.0f, 32.0f, 32.0f }, { tilemap.pos[y * worldWidth + x].x, tilemap.pos[y * worldWidth + x].y, 16.0f, 16.0f }, 1.0f);
-                    break;
-                }
+            case 1: // Ground
+                engine.renderer.RenderTexture(tiles_texture, { 32.0f, 0.0f, 32.0f, 32.0f }, { tilemap[y * TILEMAP_WIDTH + x].pos.x, tilemap[y * TILEMAP_WIDTH + x].pos.y, 16.0f, 16.0f }, 1.0f);
+                break;
+            default: 
+                --tilesRendered;
+                break;
             }
-
         }
     }
+
+    engine.renderer.RenderDebugText("Tiles rendered: " + std::to_string(tilesRendered), 700.0f, 5.0f);
 }

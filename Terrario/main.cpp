@@ -8,13 +8,6 @@
 
 #include <SDL3_image/SDL_image.h>
 
-//TODO: This can be a SoA?
-struct Tile
-{
-    int type = 0;
-    SDL_FRect pos{};
-};
-
 
 int main()
 {
@@ -57,11 +50,11 @@ int main()
         
         // Game Update
         engine.renderer.PreRender();
+        SDL_SetRenderDrawColor(engine.renderer.sdl_renderer, 255, 255, 255, 255);
 
         game.Update(engine);
 
         // Render
-        SDL_SetRenderDrawColor(engine.renderer.sdl_renderer, 255, 255, 255, 255);
         engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / engine.timer.delta_time) ,5.0f, 5.0f);
         engine.renderer.RenderDebugText("ms: " + std::to_string(engine.timer.delta_time), 200.0f, 5.0f);
         engine.renderer.RenderDebugText("time elapsed: " + std::to_string(engine.timer.elapsed_time / 1000.0f), 400.0f, 5.0f);

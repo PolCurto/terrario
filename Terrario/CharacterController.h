@@ -13,6 +13,6 @@ struct CharacterController : IComponent
 
 	Entity* entity = nullptr;
 
-	float speed = 1000.0f;
+	float speed = 150.0f;
 	Vector2 direction;
 };
