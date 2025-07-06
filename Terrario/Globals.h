@@ -1,5 +1,10 @@
 #pragma once
 
+#include <string>
+#include <iostream>
+
+inline void DebugLog(const std::string& log) { std::cout << log << std::endl; } ;
+
 namespace Globals
 {
 	constexpr int WINDOW_WIDTH = 1920;

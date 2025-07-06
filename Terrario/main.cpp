@@ -21,24 +21,16 @@ int main()
     }
 
     // Init game
-    Game game(engine);
-
-    // Main loop
-    bool running = true;
-    SDL_Event event;
-
     engine.timer.Tick();
 
-    SDL_Texture* tiles_texture = engine.renderer.LoadTexture("Textures/tiles.png");
+    Game game(engine);
 
     engine.timer.Tick();
     std::cout << "World gen time: " << engine.timer.delta_time << std::endl;
 
-    SDL_FRect algo{};
-    algo.x = 32.0f;
-    algo.y = 0.0f;
-    algo.w = 32.0f;
-    algo.h = 32.0f;
+    // Main loop
+    bool running = true;
+    SDL_Event event;
 
     while (running) 
     {

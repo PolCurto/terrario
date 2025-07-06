@@ -15,6 +15,15 @@ void CharacterController::Update(Engine& engine)
 	direction.x = 0;
 	direction.y = 0;
 
+	if (engine.inputs.keyboard[SDL_SCANCODE_LSHIFT])
+	{
+		current_speed = 1000.0f;
+	}
+	else
+	{
+		current_speed = 150.0f;
+	}
+
 	if (engine.inputs.keyboard[SDL_SCANCODE_W])
 	{ 
 		direction.y -= 1;
@@ -32,7 +41,7 @@ void CharacterController::Update(Engine& engine)
 		direction.x += 1;
 	}
 
-	entity->position += direction * speed * (engine.timer.delta_time / 1000.0f);
+	entity->position += direction * current_speed * (engine.timer.delta_time / 1000.0f);
 }
 
 bool CharacterController::Close()
