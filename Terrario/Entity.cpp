@@ -1,10 +1,12 @@
 #include "Entity.h"
 
-void Entity::Update(Engine& engine)
+#include "Game.h"
+
+void Entity::Update(Engine& engine, Game& game)
 {
 	for (IComponent* component : components)
 	{
-		component->Update(engine);
+		component->Update(engine, game);
 	}
 }
 

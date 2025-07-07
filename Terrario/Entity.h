@@ -7,10 +7,11 @@
 #include <string>
 
 struct Engine;
+struct Game;
 
 struct Entity
 {
-	void Update(Engine& engine);
+	void Update(Engine& engine, Game& game);
 
 	void AddChild(Entity* newChild) { children.push_back(newChild); }
 	void AddComponent(IComponent* newComponent);

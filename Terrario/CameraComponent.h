@@ -5,13 +5,14 @@
 #include "Vector2.h"
 
 struct Entity;
+struct Game;
 
 struct CameraComponent : IComponent
 {
 	bool Init() override {
 		return true;
 	};
-	void Update(Engine& engine) override {};
+	void Update(Engine& engine, Game& game) override {};
 	bool Close() override { return true; };
 
 	void SetAsMainCamera(Engine& engine);

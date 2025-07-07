@@ -2,6 +2,8 @@
 
 #include "Vector2.h"
 #include "IntVector2.h"
+#include "Globals.h"
+#include "Window.h"
 
 #include <random>
 #include <vector>
@@ -37,11 +39,23 @@ struct TileSystem
 	void DeleteTilesArray();
 	void Update(Engine& engine);
 
-	inline void WorldToTilePos(int* x, int* y) const
+	inline void WorldToTilePos(int* x, int* y, const Window& window) const
 	{
-		*x = (*x + TILEMAP_WIDTH * 8) / 16;
-		*y = (*y + TILEMAP_HEIGHT * 8) / 16;
+		float x_ratio = static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / static_cast<float>(window.width);
+		float y_ratio = static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / static_cast<float>(window.height);
+
+		float new_x = *x;
+		float new_y = *y;
+
+		new_x = ((new_x*x_ratio) + TILEMAP_WIDTH * 8) / 16;
+		new_y = ((new_y*y_ratio) + TILEMAP_HEIGHT * 8) / 16;
+
+		*x = std::floor(new_x);
+		*y = std::floor(new_y);
 	}
+
+	void DestroyTile(int x, int y, const Window& window);
+	void PlaceTile(int x, int y, const Window& window);
 	
 	Tile* tilemap = nullptr;
 	SDL_Texture* tiles_texture = nullptr;

@@ -54,5 +54,5 @@ Game::~Game()
 void Game::Update(Engine& engine)
 {
 	tile_system.Update(engine);
-	activeScene->Update(engine);
+	activeScene->Update(engine, *this);
 }

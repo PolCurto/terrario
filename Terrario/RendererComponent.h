@@ -4,13 +4,14 @@
 
 struct Engine;
 struct Entity;
+struct Game;
 
 struct SDL_Texture;
 
 struct RendererComponent : IComponent
 {
 	bool Init() override;
-	void Update(Engine& engine) override;
+	void Update(Engine& engine, Game& game) override;
 	bool Close() override;
 
 	Entity* entity = nullptr;

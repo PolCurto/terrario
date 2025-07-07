@@ -38,7 +38,7 @@ int main()
         engine.timer.Tick();
 
         // Inputs
-        engine.inputs.Update();
+        if (!engine.inputs.Update(engine.window)) running = false;
         
         // Game Update
         engine.renderer.PreRender();
@@ -52,11 +52,6 @@ int main()
         engine.renderer.RenderDebugText("time elapsed: " + std::to_string(engine.timer.elapsed_time / 1000.0f), 400.0f, 5.0f);
         engine.renderer.Render();
 
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                running = false;
-            }
-        }
     }
 
     engine.inputs.Destroy();

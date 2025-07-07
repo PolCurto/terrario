@@ -2,6 +2,7 @@
 
 #include "Engine.h"
 #include "Entity.h"
+#include "Game.h"
 
 #include <SDL3/SDL_render.h>
 
@@ -10,7 +11,7 @@ bool RendererComponent::Init()
 	return true;
 }
 
-void RendererComponent::Update(Engine& engine)
+void RendererComponent::Update(Engine& engine, Game& game)
 {
 	SDL_FRect rectangle{};
 	rectangle.x = entity->position.x;

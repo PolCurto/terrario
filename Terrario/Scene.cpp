@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 #include "Engine.h"
+#include "Game.h"
 
 bool Scene::Load()
 {
@@ -12,10 +13,10 @@ bool Scene::Unload()
 	return true;
 }
 
-void Scene::Update(Engine& engine)
+void Scene::Update(Engine& engine, Game& game)
 {
 	for (Entity* ent : entities)
 	{
-		ent->Update(engine);
+		ent->Update(engine, game);
 	}
 }

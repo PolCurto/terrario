@@ -1,7 +1,6 @@
 #include "TileSystem.h"
 
 #include "Engine.h"
-#include "Globals.h"
 
 #include "SDL3/SDL_rect.h"
 
@@ -90,16 +89,19 @@ void TileSystem::Update(Engine& engine)
 
 
     // Tiles render
-    int x_upper_bound = engine.renderer.GetCameraPos().x + Globals::WINDOW_WIDTH / 2;
-    int x_lower_bound = engine.renderer.GetCameraPos().x - Globals::WINDOW_WIDTH / 2;
-    
-    int y_upper_bound = engine.renderer.GetCameraPos().y + Globals::WINDOW_HEIGHT / 2;
-    int y_lower_bound = engine.renderer.GetCameraPos().y - Globals::WINDOW_HEIGHT / 2;
+    int x_upper_bound = engine.renderer.GetCameraPos().x + Globals::RENDER_TEXTURE_WIDTH / 2;
+    int x_lower_bound = engine.renderer.GetCameraPos().x - Globals::RENDER_TEXTURE_WIDTH / 2;
+
+    int y_upper_bound = engine.renderer.GetCameraPos().y + Globals::RENDER_TEXTURE_HEIGHT / 2;
+    int y_lower_bound = engine.renderer.GetCameraPos().y - Globals::RENDER_TEXTURE_HEIGHT / 2;
 
     int tilesRendered = 0;
     
-    WorldToTilePos(&x_upper_bound, &y_upper_bound);
-    WorldToTilePos(&x_lower_bound, &y_lower_bound);
+    x_upper_bound = (x_upper_bound + TILEMAP_WIDTH * 8) / 16;
+    x_lower_bound = (x_lower_bound + TILEMAP_WIDTH * 8) / 16;
+
+    y_upper_bound = (y_upper_bound + TILEMAP_HEIGHT * 8) / 16;
+    y_lower_bound = (y_lower_bound + TILEMAP_HEIGHT * 8) / 16;
 
     // + 1 to avoid not rendering in border (float to int type o sht)
     ++x_upper_bound;
@@ -133,4 +135,18 @@ void TileSystem::Update(Engine& engine)
     }
 
     engine.renderer.RenderDebugText("Tiles rendered: " + std::to_string(tilesRendered), 700.0f, 5.0f);
+}
+
+void TileSystem::DestroyTile(int x, int y, const Window& window)
+{
+    WorldToTilePos(&x, &y, window);
+
+    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
+}
+
+void TileSystem::PlaceTile(int x, int y, const Window& window)
+{
+    WorldToTilePos(&x, &y, window);
+
+    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Dirt;
 }

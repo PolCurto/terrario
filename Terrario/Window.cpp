@@ -12,9 +12,16 @@ bool Window::Create()
 		return false;
 	}
 
+	const SDL_DisplayMode* dm = SDL_GetDesktopDisplayMode(1);
+	if (!dm)
+	{
+		std::cerr << "SDL_GetDesktopDisplayMode Error: " << SDL_GetError() << std::endl;
+		return false;
+	}
+
 	sdl_window = SDL_CreateWindow(
 		"Terrario",
-		Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT,
+		dm->w / 2, dm->h / 2,
 		SDL_WINDOW_RESIZABLE
 	);
 
@@ -24,6 +31,8 @@ bool Window::Create()
 		return false;
 	}
 
+	SDL_GetWindowSize(sdl_window, &width, &height);
+
 	return true;
 }
 
@@ -31,4 +40,9 @@ void Window::Destroy()
 {
 	SDL_DestroyWindow(sdl_window);
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+}
+
+void Window::UpdateWindowSize()
+{
+	SDL_GetWindowSize(sdl_window, &width, &height);
 }
