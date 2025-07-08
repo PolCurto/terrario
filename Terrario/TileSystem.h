@@ -4,11 +4,11 @@
 #include "IntVector2.h"
 #include "Globals.h"
 #include "Window.h"
+#include "Engine.h"
 
 #include <random>
 #include <vector>
 
-struct Engine;
 struct SDL_Texture;
 
 constexpr int TILEMAP_WIDTH = 8400;
@@ -39,23 +39,28 @@ struct TileSystem
 	void DeleteTilesArray();
 	void Update(Engine& engine);
 
-	inline void WorldToTilePos(int* x, int* y, const Window& window) const
+	void DestroyTile(int x, int y, const Engine& engine);
+	void PlaceTile(int x, int y, const Engine& engine);
+
+	// This assumes x and y are 0,0 in the center of the srceen
+	inline void ScreenToTilePos(int* x, int* y, const Engine& engine) const
 	{
-		float x_ratio = static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / static_cast<float>(window.width);
-		float y_ratio = static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / static_cast<float>(window.height);
 
-		float new_x = *x;
-		float new_y = *y;
+		float x_ratio = static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / static_cast<float>(engine.window.width);
+		float y_ratio = static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / static_cast<float>(engine.window.height);
 
-		new_x = ((new_x*x_ratio) + TILEMAP_WIDTH * 8) / 16;
-		new_y = ((new_y*y_ratio) + TILEMAP_HEIGHT * 8) / 16;
+		float new_x = *x * x_ratio;
+		float new_y = *y * y_ratio;
+
+		new_x += engine.renderer.GetCameraPos().x;
+		new_y += engine.renderer.GetCameraPos().y;
+
+		new_x = (new_x + TILEMAP_WIDTH * 8) / 16;
+		new_y = (new_y + TILEMAP_HEIGHT * 8) / 16;
 
 		*x = std::floor(new_x);
 		*y = std::floor(new_y);
 	}
-
-	void DestroyTile(int x, int y, const Window& window);
-	void PlaceTile(int x, int y, const Window& window);
 	
 	Tile* tilemap = nullptr;
 	SDL_Texture* tiles_texture = nullptr;

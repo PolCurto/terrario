@@ -137,16 +137,16 @@ void TileSystem::Update(Engine& engine)
     engine.renderer.RenderDebugText("Tiles rendered: " + std::to_string(tilesRendered), 700.0f, 5.0f);
 }
 
-void TileSystem::DestroyTile(int x, int y, const Window& window)
+void TileSystem::DestroyTile(int x, int y, const Engine& engine)
 {
-    WorldToTilePos(&x, &y, window);
+    ScreenToTilePos(&x, &y, engine);
 
     tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
 }
 
-void TileSystem::PlaceTile(int x, int y, const Window& window)
+void TileSystem::PlaceTile(int x, int y, const Engine& engine)
 {
-    WorldToTilePos(&x, &y, window);
+    ScreenToTilePos(&x, &y, engine);
 
     tilemap[TILEMAP_WIDTH * y + x].type = TileType::Dirt;
 }

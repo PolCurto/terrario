@@ -49,23 +49,23 @@ void CharacterController::Update(Engine& engine, Game& game)
 	entity->position += direction * current_speed * (engine.timer.delta_time / 1000.0f);
 
 
-	// TODO: This will need access to the tileSystem to interact with tiles
 	// Mouse input
 	Vector2 mouse;
 
-	mouse.x = engine.inputs.mouse_pos.x - engine.window.width / 2;
-	mouse.y = engine.inputs.mouse_pos.y - engine.window.height / 2;
-	mouse += engine.renderer.GetCameraPos();
+	mouse.x = engine.inputs.mouse_pos.x - engine.window.width / 2.0f;
+	mouse.y = engine.inputs.mouse_pos.y - engine.window.height / 2.0f;
 
+	DebugLog("Player position: " + std::to_string(entity->position.x) + " " + std::to_string(entity->position.y));
 	DebugLog("Mouse world position: " + std::to_string(mouse.x) + " " + std::to_string(mouse.y));
+	DebugLog("----");
 
 	if (engine.inputs.mouse_buttons[MouseButtons::Left] == KeyState::Down)
 	{
-		game.tile_system.DestroyTile(mouse.x, mouse.y, engine.window);
+		game.tile_system.DestroyTile(mouse.x, mouse.y, engine);
 	}
 	else if (engine.inputs.mouse_buttons[MouseButtons::Right] == KeyState::Down)
 	{
-		game.tile_system.PlaceTile(mouse.x, mouse.y, engine.window);
+		game.tile_system.PlaceTile(mouse.x, mouse.y, engine);
 	}
 }
 
