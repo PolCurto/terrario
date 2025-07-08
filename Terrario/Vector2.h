@@ -8,6 +8,11 @@ struct Vector2
 	float x = 0;
 	float y = 0;
 
+	Vector2 operator+(Vector2 other) const
+	{
+		return { x + other.x, y + other.y };
+	}
+	
 	Vector2 operator*(float other) const
 	{
 		return { x * other, y * other };

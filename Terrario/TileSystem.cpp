@@ -21,7 +21,7 @@ void TileSystem::CreateTilesArray()
     {
         for (int y = 0; y < TILEMAP_HEIGHT; ++y)
         {
-            tilemap[TILEMAP_WIDTH * y + x].world_pos = { static_cast<float>(x * 16 - TILEMAP_WIDTH * 8), static_cast<float>(y * 16 - TILEMAP_HEIGHT * 8) };
+            tilemap[TILEMAP_WIDTH * y + x].world_pos = { static_cast<float>(x * TILE_SIZE - TILEMAP_WIDTH * (TILE_SIZE * 0.5f)), static_cast<float>(y * TILE_SIZE - TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) };
 
             if (y - TILEMAP_HEIGHT / 2 > 0)
             {
@@ -97,11 +97,8 @@ void TileSystem::Update(Engine& engine)
 
     int tilesRendered = 0;
     
-    x_upper_bound = (x_upper_bound + TILEMAP_WIDTH * 8) / 16;
-    x_lower_bound = (x_lower_bound + TILEMAP_WIDTH * 8) / 16;
-
-    y_upper_bound = (y_upper_bound + TILEMAP_HEIGHT * 8) / 16;
-    y_lower_bound = (y_lower_bound + TILEMAP_HEIGHT * 8) / 16;
+    WorldToTilePos(&x_upper_bound, &y_upper_bound);
+    WorldToTilePos(&x_lower_bound, &y_lower_bound);
 
     // + 1 to avoid not rendering in border (float to int type o sht)
     ++x_upper_bound;
@@ -135,6 +132,32 @@ void TileSystem::Update(Engine& engine)
     }
 
     engine.renderer.RenderDebugText("Tiles rendered: " + std::to_string(tilesRendered), 700.0f, 5.0f);
+}
+
+bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size)
+{
+    Vector2 tiles_pos = pos;
+    WorldToTilePos(&tiles_pos.x, &tiles_pos.y);
+
+    IntVector2 top_left = { 
+        static_cast<int>(std::floorf(tiles_pos.x - size.x / TILE_SIZE * 0.5f)), 
+        static_cast<int>(std::floorf(tiles_pos.y - size.y / TILE_SIZE * 0.5f))
+    };
+
+    IntVector2 bottom_right = { 
+        static_cast<int>(std::ceilf(tiles_pos.x + size.x / TILE_SIZE * 0.5f)),
+        static_cast<int>(std::ceilf(tiles_pos.y + size.y / TILE_SIZE * 0.5f))
+    };
+
+    for (int x = top_left.x; x < bottom_right.x; ++x)
+    {
+        for (int y = top_left.y; y < bottom_right.y; ++y)
+        {
+            if (tilemap[TILEMAP_WIDTH * y + x].type != TileType::Empty) return true;
+        }
+    }
+
+    return false;
 }
 
 void TileSystem::DestroyTile(int x, int y, const Engine& engine)

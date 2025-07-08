@@ -11,6 +11,9 @@ struct Game;
 
 struct Entity
 {
+	Entity(const std::string& name, Entity* parent, const Vector2& position, const Vector2& size) 
+		: name(name), position(position), size(size), parent(parent) {};
+
 	void Update(Engine& engine, Game& game);
 
 	void AddChild(Entity* newChild) { children.push_back(newChild); }
@@ -18,9 +21,10 @@ struct Entity
 
 
 	std::string name = "";
-	Vector2 position;
+	Vector2 position{};
+	Vector2 size{};
 
-	Entity* parent;
+	Entity* parent = nullptr;
 	std::vector<Entity*> children;
 	std::vector<IComponent*> components;
 };

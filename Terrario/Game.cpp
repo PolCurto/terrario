@@ -13,8 +13,7 @@ Game::Game(Engine& engine)
 
 	/* Player */
 	{
-		Entity* player = new Entity();
-		player->name = "Player";
+		Entity* player = new Entity("Player", nullptr, { 5.0f, -50.0f }, { 32.0f, 64.0f });
 	
 		RendererComponent* rc = new RendererComponent();
 		rc->entity = player;

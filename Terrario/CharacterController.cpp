@@ -46,18 +46,19 @@ void CharacterController::Update(Engine& engine, Game& game)
 		direction.x += 1;
 	}
 
-	entity->position += direction * current_speed * (engine.timer.delta_time / 1000.0f);
+	Vector2 desired_position = entity->position + direction * current_speed * (engine.timer.delta_time / 1000.0f);
 
+	// Check collisions
 
-	// Mouse input
+	// TODO: Debug de la hitbox
+	bool collision = game.tile_system.CheckForTiles(desired_position, entity->size);
+	if (!collision) entity->position = desired_position;
+
+	// TODO: All this will be replaced and depending on the item at hand, this is for testing
 	Vector2 mouse;
 
 	mouse.x = engine.inputs.mouse_pos.x - engine.window.width / 2.0f;
 	mouse.y = engine.inputs.mouse_pos.y - engine.window.height / 2.0f;
-
-	DebugLog("Player position: " + std::to_string(entity->position.x) + " " + std::to_string(entity->position.y));
-	DebugLog("Mouse world position: " + std::to_string(mouse.x) + " " + std::to_string(mouse.y));
-	DebugLog("----");
 
 	if (engine.inputs.mouse_buttons[MouseButtons::Left] == KeyState::Down)
 	{
