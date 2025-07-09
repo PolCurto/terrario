@@ -5,14 +5,15 @@
 #include "Game.h"
 
 #include <SDL3/SDL_scancode.h>
+#include <SDL3/SDL_Render.h>
 #include <iostream>
 
 constexpr float DEFUALT_SPEED = 150.0f;
 
 bool CharacterController::Init()
 {
-	return true;
 	current_speed = DEFUALT_SPEED;
+	return true;
 }
 
 void CharacterController::Update(Engine& engine, Game& game)
@@ -20,6 +21,7 @@ void CharacterController::Update(Engine& engine, Game& game)
 	direction.x = 0;
 	direction.y = 0;
 
+	// Get inputs
 	if (engine.inputs.keyboard[SDL_SCANCODE_LSHIFT] == KeyState::Down)
 	{
 		current_speed = DEFUALT_SPEED * 10;
@@ -29,30 +31,26 @@ void CharacterController::Update(Engine& engine, Game& game)
 		current_speed = DEFUALT_SPEED;
 	}
 
-	if (engine.inputs.keyboard[SDL_SCANCODE_W] == KeyState::Hold)
-	{ 
-		direction.y -= 1;
-	}
 	if (engine.inputs.keyboard[SDL_SCANCODE_A] == KeyState::Hold)
 	{
 		direction.x -= 1;
-	}
-	if (engine.inputs.keyboard[SDL_SCANCODE_S] == KeyState::Hold)
-	{
-		direction.y += 1;
 	}
 	if (engine.inputs.keyboard[SDL_SCANCODE_D] == KeyState::Hold)
 	{
 		direction.x += 1;
 	}
 
+	if (engine.inputs.keyboard[SDL_SCANCODE_F1] == KeyState::Down)
+	{
+		debug_mode = !debug_mode;
+	}
+
 	Vector2 desired_position = entity->position + direction * current_speed * (engine.timer.delta_time / 1000.0f);
 
 	// Check collisions
-
-	// TODO: Debug de la hitbox
 	bool collision = game.tile_system.CheckForTiles(desired_position, entity->size);
 	if (!collision) entity->position = desired_position;
+	if (debug_mode) engine.renderer.RenderRect({ entity->position.x - entity->size.x / 2, entity->position.y - entity->size.y / 2, entity->size.x, entity->size.y }, 0, 255, 0, 255, 1.0f, false);
 
 	// TODO: All this will be replaced and depending on the item at hand, this is for testing
 	Vector2 mouse;

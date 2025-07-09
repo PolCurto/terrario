@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="CharacterController.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="CharacterController.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />

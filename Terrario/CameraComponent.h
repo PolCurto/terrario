@@ -19,4 +19,5 @@ struct CameraComponent : IComponent
 	const Vector2& GetPosition() const { return entity->position; };
 
 	Entity* entity = nullptr;
+	bool free_cam = false;
 };

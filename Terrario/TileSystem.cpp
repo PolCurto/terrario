@@ -115,13 +115,13 @@ void TileSystem::Update(Engine& engine)
             {
             case TileType::Dirt: // Dirt
                 if (y - 1 > 0 && tilemap[TILEMAP_WIDTH * (y - 1) + x].type != TileType::Dirt)
-                    engine.renderer.RenderTexture(tiles_texture, { 64.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, 16.0f, 16.0f }, 1.0f);
+                    engine.renderer.RenderTexture(tiles_texture, { 64.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 else
-                    engine.renderer.RenderTexture(tiles_texture, { 32.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, 16.0f, 16.0f }, 1.0f);
+                    engine.renderer.RenderTexture(tiles_texture, { 32.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
 
             case TileType::Tree: // Tree
-                engine.renderer.RenderTexture(tiles_texture, { 352.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, 16.0f, 16.0f }, 1.0f);
+                engine.renderer.RenderTexture(tiles_texture, { 352.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
 
             default: 

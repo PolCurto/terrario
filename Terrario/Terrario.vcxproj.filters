@@ -1,105 +1,97 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Archivos de origen">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Archivos de encabezado">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Archivos de recursos">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{152e636f-199d-409f-af11-cc0b712b792e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{fe460b6c-5a87-41a7-9457-a5c9eabc92fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{9c34668f-6999-46d1-95b4-0563e59542c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Scripts">
+      <UniqueIdentifier>{284b90a4-12fd-4c0d-ae89-6fe56da29669}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="RendererComponent.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Inputs.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterController.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="TileSystem.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="Inputs.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterController.cpp">
+      <Filter>Components\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="TileSystem.cpp" />
+    <ClCompile Include="CameraController.cpp">
+      <Filter>Components\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="IComponent.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="RendererComponent.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Inputs.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterController.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="TileSystem.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Renderer.h">
+      <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="IntVector2.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Inputs.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterController.h">
+      <Filter>Components\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="TileSystem.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="CameraController.h">
+      <Filter>Components\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

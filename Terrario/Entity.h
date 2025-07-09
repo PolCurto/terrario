@@ -11,6 +11,7 @@ struct Game;
 
 struct Entity
 {
+	Entity() = default;
 	Entity(const std::string& name, Entity* parent, const Vector2& position, const Vector2& size) 
 		: name(name), position(position), size(size), parent(parent) {};
 

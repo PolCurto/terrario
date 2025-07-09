@@ -6,6 +6,7 @@
 #include "RendererComponent.h"
 #include "CameraComponent.h"
 #include "CharacterController.h"
+#include "CameraController.h"
 
 Game::Game(Engine& engine)
 {
@@ -13,7 +14,7 @@ Game::Game(Engine& engine)
 
 	/* Player */
 	{
-		Entity* player = new Entity("Player", nullptr, { 5.0f, -50.0f }, { 32.0f, 64.0f });
+		Entity* player = new Entity("Player", nullptr, { 5.0f, -50.0f }, { 24.0f, 48.0f });
 	
 		RendererComponent* rc = new RendererComponent();
 		rc->entity = player;
@@ -24,13 +25,21 @@ Game::Game(Engine& engine)
 		ch->entity = player;
 		player->AddComponent(ch);
 
-		CameraComponent* cam = new CameraComponent();
-		cam->entity = player;
-		cam->SetAsMainCamera(engine);
-		player->AddComponent(cam);
+		Entity* camera_ent = new Entity();
+		camera_ent->name = "Camera";
 
+		CameraComponent* cam = new CameraComponent();
+		cam->entity = camera_ent;
+		cam->SetAsMainCamera(engine);
+		camera_ent->AddComponent(cam);
+
+		CameraController* cam_controller = new CameraController();
+		cam_controller->entity = camera_ent;
+		cam_controller->target = player;
+		camera_ent->AddComponent(cam_controller);
 
 		level1->entities.push_back(player);
+		level1->entities.push_back(camera_ent);
 	}
 
 	tile_system.CreateTilesArray();

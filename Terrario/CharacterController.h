@@ -17,4 +17,6 @@ struct CharacterController : IComponent
 
 	float current_speed = 150.0f;
 	Vector2 direction;
+
+	bool debug_mode = false;
 };
