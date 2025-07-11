@@ -65,6 +65,19 @@ void Renderer::RenderRect(const SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b
 	else SDL_RenderRect(sdl_renderer, &newRect);
 }
 
+void Renderer::RenderLine(const Vector2& start_pos, const Vector2& end_pos, uint8_t r, uint8_t g, uint8_t b, uint8_t a) const
+{
+	SDL_SetRenderDrawColor(sdl_renderer, r, g, b, a);
+
+	int x0 = static_cast<int>(std::floorf(start_pos.x - camera->GetPosition().x + static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / 2));
+	int x1 = static_cast<int>(std::floorf(end_pos.x - camera->GetPosition().x + static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / 2));
+	
+	int y0 = static_cast<int>(std::floorf(start_pos.y - camera->GetPosition().y + static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / 2));
+	int y1 = static_cast<int>(std::floorf(end_pos.y - camera->GetPosition().y + static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / 2));
+
+	SDL_RenderLine(sdl_renderer, x0, y0, x1, y1);
+}
+
 void Renderer::RenderTexture(SDL_Texture* texture, const SDL_FRect& source, const SDL_FRect& destination, float parallaxFactor) const
 {
 	SDL_FRect newRect = destination;
@@ -76,9 +89,10 @@ void Renderer::RenderTexture(SDL_Texture* texture, const SDL_FRect& source, cons
 	SDL_RenderTexture(sdl_renderer, texture, &source, &newRect);
 }
 
-void Renderer::RenderDebugText(const std::string& text, float x, float y) const
+void Renderer::RenderDebugText(const std::string& text, const Vector2& pos) const
 {
-	SDL_RenderDebugText(sdl_renderer, x, y, text.c_str());
+	SDL_SetRenderDrawColor(sdl_renderer, 255, 255, 255, 255);
+	SDL_RenderDebugText(sdl_renderer, pos.x, pos.y, text.c_str());
 }
 
 SDL_Texture* Renderer::LoadTexture(const char* filepath) const

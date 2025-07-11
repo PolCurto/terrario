@@ -12,6 +12,11 @@ struct Vector2
 	{
 		return { x + other.x, y + other.y };
 	}
+
+	Vector2 operator-(Vector2 other) const
+	{
+		return { x - other.x, y - other.y };
+	}
 	
 	Vector2 operator*(float other) const
 	{

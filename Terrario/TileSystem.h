@@ -40,9 +40,9 @@ struct TileSystem
 	void DeleteTilesArray();
 	void Update(Engine& engine);
 
-	bool CheckForTiles(const Vector2& pos, const Vector2& size);
-	void DestroyTile(int x, int y, const Engine& engine);
-	void PlaceTile(int x, int y, const Engine& engine);
+	bool CheckForTiles(const Vector2& pos, const Vector2& size) const;
+	void DestroyTile(float x, float y, const Engine& engine);
+	void PlaceTile(float x, float y, const Engine& engine);
 
 	// This assumes x and y are 0,0 in the center of the srceen
 	inline void ScreenToTilePos(int* x, int* y, const Engine& engine) const
@@ -59,19 +59,28 @@ struct TileSystem
 		new_x = (new_x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE;
 		new_y = (new_y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE;
 
-		*x = std::floor(new_x);
-		*y = std::floor(new_y);
+		*x = static_cast<int>(std::floor(new_x));
+		*y = static_cast<int>(std::floor(new_y));
 	}
 
 	inline void WorldToTilePos(int* x, int* y) const
 	{
-		*x = (*x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE;
-		*y = (*y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE;
+		*x = static_cast<int>((*x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE);
+		*y = static_cast<int>((*y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE);
 	}
 	inline void WorldToTilePos(float* x, float* y) const
 	{
 		*x = (*x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE;
 		*y = (*y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE;
+	}
+
+	inline bool IsTile(int x, int y) const
+	{
+		// Check bounds
+		if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT) return false;
+
+		if (tilemap[TILEMAP_WIDTH * y + x].type != TileType::Empty) return true;
+		else return false;
 	}
 	
 	Tile* tilemap = nullptr;
@@ -83,6 +92,8 @@ struct TileSystem
 	// Render -> Only visible tiles
 	// Update -> Only tiles more or less close to the player, but not neccesarily visible
 	// There are some tiles, like trees, which shuld be always updated. For this I could have an array of always_update_tiles and go through it, because not a lot should be there
+
+	// Trees prob should be entities, which have its tiles as params, but things like elapsed time goes into the entity to reduce tile size. Also with things like crops, furniture, etc.
 
 	std::mt19937 rng;
 	std::uniform_int_distribution<int> int_distribution;

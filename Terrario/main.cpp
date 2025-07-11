@@ -30,7 +30,6 @@ int main()
 
     // Main loop
     bool running = true;
-    SDL_Event event;
 
     while (running) 
     {
@@ -47,9 +46,11 @@ int main()
         game.Update(engine);
 
         // Render
-        engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / engine.timer.delta_time) ,5.0f, 5.0f);
-        engine.renderer.RenderDebugText("ms: " + std::to_string(engine.timer.delta_time), 200.0f, 5.0f);
-        engine.renderer.RenderDebugText("time elapsed: " + std::to_string(engine.timer.elapsed_time / 1000.0f), 400.0f, 5.0f);
+        engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / engine.timer.delta_time), { 5.0f, 5.0f });
+        engine.renderer.RenderDebugText("ms: " + std::to_string(engine.timer.delta_time), { 165.0f, 5.0f });
+        engine.renderer.RenderDebugText("time elapsed: " + std::to_string(engine.timer.elapsed_time / 1000.0f), { 290.0f, 5.0f });
+        engine.renderer.RenderDebugText("F1 - Toggle Debug Mode", { 1700.0f, 5.0f });
+
         engine.renderer.Render();
 
     }

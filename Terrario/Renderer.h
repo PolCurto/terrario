@@ -20,8 +20,9 @@ struct Renderer
 	void PreRender() const;
 	void Render() const;
 	void RenderRect(const SDL_FRect& rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float parallaxFactor = 1.0f, bool fill = true) const;
+	void RenderLine(const Vector2& start_pos, const Vector2& end_pos, uint8_t r, uint8_t g, uint8_t b, uint8_t a) const;
 	void RenderTexture(SDL_Texture* texture, const SDL_FRect& source, const SDL_FRect& destination, float parallaxFactor) const;
-	void RenderDebugText(const std::string& text, float x, float y) const;
+	void RenderDebugText(const std::string& text, const Vector2& pos) const;
 
 	SDL_Texture* LoadTexture(const char* filepath) const;
 	void UnloadTexture(const SDL_Texture* texture);

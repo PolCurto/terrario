@@ -48,6 +48,9 @@
     <ClCompile Include="CameraController.cpp">
       <Filter>Components\Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="Raycast.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -92,6 +95,9 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="CameraController.h">
       <Filter>Components\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Raycast.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,7 +16,8 @@ struct CharacterController : IComponent
 	Entity* entity = nullptr;
 
 	float current_speed = 150.0f;
-	Vector2 direction;
+	Vector2 direction{};
+	Vector2 speed{};
 
 	bool debug_mode = false;
 };

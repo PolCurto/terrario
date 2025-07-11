@@ -89,11 +89,11 @@ void TileSystem::Update(Engine& engine)
 
 
     // Tiles render
-    int x_upper_bound = engine.renderer.GetCameraPos().x + Globals::RENDER_TEXTURE_WIDTH / 2;
-    int x_lower_bound = engine.renderer.GetCameraPos().x - Globals::RENDER_TEXTURE_WIDTH / 2;
+    int x_upper_bound = static_cast<int>(engine.renderer.GetCameraPos().x + Globals::RENDER_TEXTURE_WIDTH / 2.0f);
+    int x_lower_bound = static_cast<int>(engine.renderer.GetCameraPos().x - Globals::RENDER_TEXTURE_WIDTH / 2.0f);
 
-    int y_upper_bound = engine.renderer.GetCameraPos().y + Globals::RENDER_TEXTURE_HEIGHT / 2;
-    int y_lower_bound = engine.renderer.GetCameraPos().y - Globals::RENDER_TEXTURE_HEIGHT / 2;
+    int y_upper_bound = static_cast<int>(engine.renderer.GetCameraPos().y + Globals::RENDER_TEXTURE_HEIGHT / 2.0f);
+    int y_lower_bound = static_cast<int>(engine.renderer.GetCameraPos().y - Globals::RENDER_TEXTURE_HEIGHT / 2.0f);
 
     int tilesRendered = 0;
     
@@ -131,13 +131,15 @@ void TileSystem::Update(Engine& engine)
         }
     }
 
-    engine.renderer.RenderDebugText("Tiles rendered: " + std::to_string(tilesRendered), 700.0f, 5.0f);
+    engine.renderer.RenderDebugText("Tiles rendered: " + std::to_string(tilesRendered), { 500.0f, 5.0f });
 }
 
-bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size)
+bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size) const
 {
     Vector2 tiles_pos = pos;
     WorldToTilePos(&tiles_pos.x, &tiles_pos.y);
+
+    if (tiles_pos.x < 0 || tiles_pos.x >= TILEMAP_WIDTH || tiles_pos.y < 0 || tiles_pos.y >= TILEMAP_HEIGHT) return false;
 
     IntVector2 top_left = { 
         static_cast<int>(std::floorf(tiles_pos.x - size.x / TILE_SIZE * 0.5f)), 
@@ -149,27 +151,32 @@ bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size)
         static_cast<int>(std::ceilf(tiles_pos.y + size.y / TILE_SIZE * 0.5f))
     };
 
+
     for (int x = top_left.x; x < bottom_right.x; ++x)
     {
         for (int y = top_left.y; y < bottom_right.y; ++y)
         {
-            if (tilemap[TILEMAP_WIDTH * y + x].type != TileType::Empty) return true;
+            if (tilemap[TILEMAP_WIDTH * y + x].type == TileType::Dirt) return true;
         }
     }
 
     return false;
 }
 
-void TileSystem::DestroyTile(int x, int y, const Engine& engine)
+void TileSystem::DestroyTile(float x, float y, const Engine& engine)
 {
-    ScreenToTilePos(&x, &y, engine);
+    int ix = static_cast<int>(x);
+    int iy = static_cast<int>(y);
+    ScreenToTilePos(&ix, &iy, engine);
 
-    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
+    tilemap[TILEMAP_WIDTH * iy + ix].type = TileType::Empty;
 }
 
-void TileSystem::PlaceTile(int x, int y, const Engine& engine)
+void TileSystem::PlaceTile(float x, float y, const Engine& engine)
 {
-    ScreenToTilePos(&x, &y, engine);
+    int ix = static_cast<int>(x);
+    int iy = static_cast<int>(y);
+    ScreenToTilePos(&ix, &iy, engine);
 
-    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Dirt;
+    tilemap[TILEMAP_WIDTH * iy + ix].type = TileType::Dirt;
 }

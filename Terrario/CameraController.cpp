@@ -5,8 +5,8 @@
 
 #include <SDL3/SDL_scancode.h>
 
-constexpr int DEFAULT_SPEED = 1000;
-constexpr int FAST_SPEED = 4000;
+constexpr float DEFAULT_SPEED = 1000.0f;
+constexpr float FAST_SPEED = 4000.0f;
 
 void CameraController::Update(Engine& engine, Game& game)
 {
