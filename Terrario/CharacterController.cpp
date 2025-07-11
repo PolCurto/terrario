@@ -23,8 +23,6 @@ void CharacterController::Update(Engine& engine, Game& game)
 	Vector2 desired_position{};
 	speed.x = 0;
 
-	if (speed.y < 1000) speed.y += GRAVITY * (engine.timer.delta_time / 1000.0f);
-
 	// Get inputs
 	if (engine.inputs.keyboard[SDL_SCANCODE_LSHIFT] == KeyState::Down)
 	{
@@ -64,18 +62,27 @@ void CharacterController::Update(Engine& engine, Game& game)
 	if (!collision) entity->position.y = desired_position.y;
 
 	// Check grounded
-	const Vector2 end_pos = entity->position + Vector2(0.0f, entity->size.y);
-	bool is_grounded = Raycast::ThrowTilesRay(entity->position, end_pos, game.tile_system);
+	const Vector2 ray_origin = entity->position + Vector2(0.0f, entity->size.y / 2.0f);
+	const Vector2 ray_end = ray_origin + Vector2(0.0f, 1.0f);
+	bool is_grounded = (
+			Raycast::ThrowTilesRay(ray_origin, ray_end, game.tile_system) ||
+			Raycast::ThrowTilesRay(ray_origin + Vector2(entity->size.x / 2.0f, 0.0f), ray_end + Vector2(entity->size.x / 2.0f, 0.0f), game.tile_system) ||
+			Raycast::ThrowTilesRay(ray_origin - Vector2(entity->size.x / 2.0f, 0.0f), ray_end - Vector2(entity->size.x / 2.0f, 0.0f), game.tile_system)
+		);
 
 	if (debug_mode)
 	{
 		engine.renderer.RenderRect({ entity->position.x - entity->size.x / 2, entity->position.y - entity->size.y / 2, entity->size.x, entity->size.y }, 0, 255, 0, 255, 1.0f, false);
 		uint8_t r = is_grounded ? 255 : 0;
 		uint8_t g = is_grounded ? 0 : 255;
-		engine.renderer.RenderLine(entity->position, end_pos, r, g, 0, 255);
+		engine.renderer.RenderLine(ray_origin, ray_end, r, g, 0, 255);
+		engine.renderer.RenderLine(ray_origin + Vector2(entity->size.x / 2.0f, 0.0f), ray_end + Vector2(entity->size.x / 2.0f, 0.0f), r, g, 0, 255);
+		engine.renderer.RenderLine(ray_origin - Vector2(entity->size.x / 2.0f, 0.0f), ray_end - Vector2(entity->size.x / 2.0f, 0.0f), r, g, 0, 255);
 
 		engine.renderer.RenderDebugText("Player pos: " + std::to_string(entity->position.x) + " " + std::to_string(entity->position.y), { 1600.0f, 20.0f });
 	}
+
+	if (!is_grounded) speed.y += GRAVITY * (engine.timer.delta_time / 1000.0f);
 
 	// TODO: All this will be replaced and depending on the item at hand, this is for testing
 	Vector2 mouse;
