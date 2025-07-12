@@ -7,7 +7,7 @@
 TileSystem::TileSystem()
 {
     rng = std::mt19937(std::random_device{}());
-    int_distribution = std::uniform_int_distribution<int>(1, 100);
+    dist = std::uniform_real_distribution<float>(1.0f, 100.0f);
 }
 
 void TileSystem::CreateTilesArray()
@@ -23,31 +23,88 @@ void TileSystem::CreateTilesArray()
         {
             tilemap[TILEMAP_WIDTH * y + x].world_pos = { static_cast<float>(x * TILE_SIZE - TILEMAP_WIDTH * (TILE_SIZE * 0.5f)), static_cast<float>(y * TILE_SIZE - TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) };
 
-            if (y - TILEMAP_HEIGHT / 2 > 0)
+            if (y - TILEMAP_HEIGHT / 2 > 0 && y - TILEMAP_HEIGHT / 2 <= 10)
             {
                 tilemap[TILEMAP_WIDTH * y + x].type = TileType::Dirt;
+            }
+            else if (y - TILEMAP_HEIGHT / 2 > 10)
+            {
+                tilemap[TILEMAP_WIDTH * y + x].type = TileType::Rock;
             }
         }
     }
 
-    // Trees pass
+    std::vector<IntVector2> ores_pos;
+
+    // Second pass
+    int ores_count = 0;
     int trees = 0;
     for (int x = 0; x < TILEMAP_WIDTH; ++x)
     {
         for (int y = 0; y < TILEMAP_HEIGHT; ++y)
         {
+            // Trees
             if (x > 0 && x < TILEMAP_WIDTH - 1 && y < TILEMAP_HEIGHT - 1 && tilemap[TILEMAP_WIDTH * y + x].type == TileType::Empty &&
                 tilemap[TILEMAP_WIDTH * y + (x+1)].type == TileType::Empty && tilemap[TILEMAP_WIDTH * y + (x-1)].type == TileType::Empty &&
-                tilemap[TILEMAP_WIDTH * (y+1) + x].type == TileType::Dirt && int_distribution(rng) < 10)
+                tilemap[TILEMAP_WIDTH * (y+1) + x].type == TileType::Dirt && dist(rng) < 10.0f)
             {
                 ++trees;
                 tilemap[TILEMAP_WIDTH * y + x].type = TileType::Tree;
                 tilemap[TILEMAP_WIDTH * y + x].active = true;
                 always_update_tiles.push_back({ x, y });
             }
+
+            // Ores
+            if (y - TILEMAP_HEIGHT / 2 > 15 && tilemap[TILEMAP_WIDTH * y + (x + 1)].type == TileType::Rock && dist(rng) < 1.05f)
+            {
+                ++ores_count;
+                tilemap[TILEMAP_WIDTH * y + x].type = TileType::Copper;
+                ores_pos.push_back({x, y});
+            }
+            if (y - TILEMAP_HEIGHT / 2 > 25 && tilemap[TILEMAP_WIDTH * y + (x + 1)].type == TileType::Rock && dist(rng) < 1.05f)
+            {
+                ++ores_count;
+                tilemap[TILEMAP_WIDTH * y + x].type = TileType::Silver;
+                ores_pos.push_back({ x, y });
+            }
+            if (y - TILEMAP_HEIGHT / 2 > 35 && tilemap[TILEMAP_WIDTH * y + (x + 1)].type == TileType::Rock && dist(rng) < 1.05f)
+            {
+                ++ores_count;
+                tilemap[TILEMAP_WIDTH * y + x].type = TileType::Gold;
+                ores_pos.push_back({ x, y });
+            }
         }
     }
 
+    std::uniform_real_distribution<float> ores_dist = std::uniform_real_distribution<float>(5.0f, 30.0f);
+
+    // Ore propagation
+    for (const IntVector2& pos : ores_pos)
+    {
+        int expansion = std::floor(ores_dist(rng));
+        TileType current_type = tilemap[TILEMAP_WIDTH * pos.y + pos.x].type;
+
+        for (int i = 0; i < expansion; ++i)
+        {
+            IntVector2 current_pos = pos;
+
+            while (true)
+            {
+                if (dist(rng) < 50.0f) ++current_pos.x;
+                else ++current_pos.y;
+
+                if (current_pos.x < 0 || current_pos.x >= TILEMAP_WIDTH || current_pos.y < 0 || current_pos.y >= TILEMAP_HEIGHT) break;
+
+                if (tilemap[TILEMAP_WIDTH * current_pos.y + current_pos.x].type == TileType::Rock)
+                {
+                    tilemap[TILEMAP_WIDTH * current_pos.y + current_pos.x].type = current_type;
+                    break;
+                }
+            }
+        }
+    }
+
+    DebugLog("Ores generated: " + std::to_string(ores_count));
     DebugLog("Trees generated: " + std::to_string(trees));
 }
 
@@ -104,6 +161,14 @@ void TileSystem::Update(Engine& engine)
     ++x_upper_bound;
     ++y_upper_bound;
 
+    x_upper_bound = std::clamp(x_upper_bound, 0, TILEMAP_WIDTH - 1);
+    x_lower_bound = std::clamp(x_lower_bound, 0, TILEMAP_WIDTH - 1);
+
+    y_upper_bound = std::clamp(y_upper_bound, 0, TILEMAP_HEIGHT - 1);
+    y_lower_bound = std::clamp(y_lower_bound, 0, TILEMAP_HEIGHT - 1);
+
+    // TODO: Probably world_pos not needed, it can be calculated in place with two multiplications. When doing entities for trees, crops, etc, they will have the elapsed_time also.
+
     // Iterate only through visible tiles
     for (int x = x_lower_bound; x < x_upper_bound; ++x)
     {
@@ -113,14 +178,29 @@ void TileSystem::Update(Engine& engine)
             const Tile& current_tile = tilemap[TILEMAP_WIDTH * y + x];
             switch (current_tile.type)
             {
-            case TileType::Dirt: // Dirt
+            case TileType::Dirt: 
                 if (y - 1 > 0 && tilemap[TILEMAP_WIDTH * (y - 1) + x].type != TileType::Dirt)
                     engine.renderer.RenderTexture(tiles_texture, { 64.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 else
                     engine.renderer.RenderTexture(tiles_texture, { 32.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
 
-            case TileType::Tree: // Tree
+            case TileType::Rock:
+                engine.renderer.RenderTexture(tiles_texture, { 96.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
+            
+            // Ores
+            case TileType::Copper:
+                engine.renderer.RenderTexture(tiles_texture, { 416.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
+            case TileType::Silver:
+                engine.renderer.RenderTexture(tiles_texture, { 448.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
+            case TileType::Gold:
+                engine.renderer.RenderTexture(tiles_texture, { 480.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
+
+            case TileType::Tree: 
                 engine.renderer.RenderTexture(tiles_texture, { 352.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
 
@@ -156,7 +236,7 @@ bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size) const
     {
         for (int y = top_left.y; y < bottom_right.y; ++y)
         {
-            if (tilemap[TILEMAP_WIDTH * y + x].type == TileType::Dirt) return true;
+            if (tilemap[TILEMAP_WIDTH * y + x].type != TileType::Empty) return true;
         }
     }
 

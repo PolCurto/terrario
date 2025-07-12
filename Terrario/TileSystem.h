@@ -20,7 +20,11 @@ enum class TileType : uint8_t
 {
 	Empty = 0,
 	Dirt,
-	Tree
+	Tree,
+	Rock,
+	Copper,
+	Silver,
+	Gold,
 };
 
 // TO CONSIDER: Maybe another struct only for active tiles, which has the elapsed_time?
@@ -96,5 +100,5 @@ struct TileSystem
 	// Trees prob should be entities, which have its tiles as params, but things like elapsed time goes into the entity to reduce tile size. Also with things like crops, furniture, etc.
 
 	std::mt19937 rng;
-	std::uniform_int_distribution<int> int_distribution;
+	std::uniform_real_distribution<float> dist;
 };
