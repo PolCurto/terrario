@@ -48,7 +48,7 @@ void TreeComponent::Update(Engine& engine, Game& game)
                             const int x = top.x + dx;
                             const int y = top.y + dy;
 
-                            if (game.tile_system.IsTile(x, y) && x >= 0 && x < TILEMAP_WIDTH && y >= 0 && y < TILEMAP_HEIGHT) 
+                            if (!game.tile_system.IsTile(x, y) && x >= 0 && x < TILEMAP_WIDTH && y >= 0 && y < TILEMAP_HEIGHT) 
                             {
                                 game.tile_system.SetTile(x, y, TileType::Leaves);
                             }

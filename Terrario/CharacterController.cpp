@@ -79,7 +79,8 @@ void CharacterController::Update(Engine& engine, Game& game)
 		engine.renderer.RenderLine(ray_origin + Vector2(entity->size.x / 2.0f, 0.0f), ray_end + Vector2(entity->size.x / 2.0f, 0.0f), r, g, 0, 255);
 		engine.renderer.RenderLine(ray_origin - Vector2(entity->size.x / 2.0f, 0.0f), ray_end - Vector2(entity->size.x / 2.0f, 0.0f), r, g, 0, 255);
 
-		engine.renderer.RenderDebugText("Player pos: " + std::to_string(entity->position.x) + " " + std::to_string(entity->position.y), { 1600.0f, 20.0f });
+		engine.renderer.RenderDebugText("Pos: " + std::to_string(entity->position.x) + " " + std::to_string(entity->position.y), entity->position - engine.renderer.GetCameraPos() + 
+		Vector2(Globals::RENDER_TEXTURE_WIDTH / 2.0f, Globals::RENDER_TEXTURE_HEIGHT / 2.0f) - Vector2(100.0f, 50.0f));
 	}
 
 	if (!is_grounded) speed.y += GRAVITY * (engine.timer.delta_time / 1000.0f);

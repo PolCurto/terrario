@@ -23,11 +23,11 @@ int main()
     engine.random.Create();
 
     // Init game
-    engine.timer.Tick();
+    engine.timer.Tick(engine.inputs);
 
     Game game(engine);
 
-    engine.timer.Tick();
+    engine.timer.Tick(engine.inputs);
     std::cout << "World gen time: " << engine.timer.delta_time << std::endl;
 
     // Main loop
@@ -36,7 +36,7 @@ int main()
     while (running) 
     {
         // Timer
-        engine.timer.Tick();
+        engine.timer.Tick(engine.inputs);
 
         // Inputs
         if (!engine.inputs.Update(engine.window)) running = false;
@@ -51,7 +51,9 @@ int main()
         engine.renderer.RenderDebugText("FPS: " + std::to_string(1000.0f / engine.timer.delta_time), { 5.0f, 5.0f });
         engine.renderer.RenderDebugText("ms: " + std::to_string(engine.timer.delta_time), { 165.0f, 5.0f });
         engine.renderer.RenderDebugText("time elapsed: " + std::to_string(engine.timer.elapsed_time / 1000.0f), { 290.0f, 5.0f });
-        engine.renderer.RenderDebugText("F1 - Toggle Debug Mode", { 1700.0f, 5.0f });
+        engine.renderer.RenderDebugText("F1 - Toggle Debug Mode", { 1400.0f, 5.0f });
+        engine.renderer.RenderDebugText("F2 - Free camera", { 1600.0f, 5.0f });
+        engine.renderer.RenderDebugText("F3 - Speed up time", { 1750.0f, 5.0f });
 
         engine.renderer.Render();
 
