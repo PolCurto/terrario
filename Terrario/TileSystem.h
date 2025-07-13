@@ -29,10 +29,8 @@ enum class TileType : uint8_t
 	Gold,
 };
 
-// TO CONSIDER: Maybe another struct only for active tiles, which has the elapsed_time?
 struct Tile
 {
-	Vector2 world_pos{};
 	bool active = false;
 	TileType type = TileType::Empty;
 };
@@ -49,7 +47,7 @@ struct TileSystem
 	void DestroyTile(float x, float y, const Engine& engine);
 	void PlaceTile(float x, float y, const Engine& engine);
 
-	// This assumes x and y are 0,0 in the center of the srceen
+	// This assumes x and y are 0,0 in the center of the screen
 	void ScreenToTilePos(int* x, int* y, const Engine& engine) const
 	{
 		float x_ratio = static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / static_cast<float>(engine.window.width);

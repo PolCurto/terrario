@@ -20,8 +20,6 @@ void TileSystem::CreateTilesArray(Engine& engine, Scene& active_scene)
     {
         for (int y = 0; y < TILEMAP_HEIGHT; ++y)
         {
-            tilemap[TILEMAP_WIDTH * y + x].world_pos = { static_cast<float>(x * TILE_SIZE - TILEMAP_WIDTH * (TILE_SIZE * 0.5f)), static_cast<float>(y * TILE_SIZE - TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) };
-
             if (y - TILEMAP_HEIGHT / 2 > 0 && y - TILEMAP_HEIGHT / 2 <= 10)
             {
                 tilemap[TILEMAP_WIDTH * y + x].type = TileType::Dirt;
@@ -180,36 +178,39 @@ void TileSystem::Update(Engine& engine)
         for (int y = y_lower_bound; y < y_upper_bound; ++y)
         {
             ++tilesRendered;
-            const Tile& current_tile = tilemap[TILEMAP_WIDTH * y + x];
-            switch (current_tile.type)
+            const float world_x = static_cast<float>(x * TILE_SIZE - TILEMAP_WIDTH * (TILE_SIZE * 0.5f));
+            const float world_y = static_cast<float>(y * TILE_SIZE - TILEMAP_HEIGHT * (TILE_SIZE * 0.5f));
+
+            switch (tilemap[TILEMAP_WIDTH * y + x].type)
             {
             case TileType::Dirt: 
                 if (y - 1 > 0 && tilemap[TILEMAP_WIDTH * (y - 1) + x].type != TileType::Dirt)
-                    engine.renderer.RenderTexture(tiles_texture, { 64.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                    engine.renderer.RenderTexture(tiles_texture, { 64.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 else
-                    engine.renderer.RenderTexture(tiles_texture, { 32.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                    engine.renderer.RenderTexture(tiles_texture, { 32.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
 
             case TileType::Rock:
-                engine.renderer.RenderTexture(tiles_texture, { 96.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
-                break;
-            
-            // Ores
-            case TileType::Copper:
-                engine.renderer.RenderTexture(tiles_texture, { 416.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
-                break;
-            case TileType::Silver:
-                engine.renderer.RenderTexture(tiles_texture, { 448.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
-                break;
-            case TileType::Gold:
-                engine.renderer.RenderTexture(tiles_texture, { 480.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                engine.renderer.RenderTexture(tiles_texture, { 96.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
 
-            case TileType::Trunk: 
-                engine.renderer.RenderTexture(tiles_texture, { 352.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                // Ores
+            case TileType::Copper:
+                engine.renderer.RenderTexture(tiles_texture, { 416.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
+            case TileType::Silver:
+                engine.renderer.RenderTexture(tiles_texture, { 448.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
+            case TileType::Gold:
+                engine.renderer.RenderTexture(tiles_texture, { 480.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y, TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
+
+            case TileType::Trunk:
+                engine.renderer.RenderTexture(tiles_texture, { 352.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y, TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
             case TileType::Leaves:
-                engine.renderer.RenderTexture(tiles_texture, { 382.0f, 0.0f, 32.0f, 32.0f }, { current_tile.world_pos.x, current_tile.world_pos.y , TILE_SIZE, TILE_SIZE }, 1.0f);
+                engine.renderer.RenderTexture(tiles_texture, { 382.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y , TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
 
             default: 
                 --tilesRendered;
