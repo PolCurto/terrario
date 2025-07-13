@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Inputs.h"
 #include "Timer.h"
+#include "RandomGen.h"
 
 struct Engine
 {
@@ -11,4 +12,5 @@ struct Engine
     Renderer renderer{};
     Inputs inputs{};
     Timer timer{};
+    RandomGen random{};
 };

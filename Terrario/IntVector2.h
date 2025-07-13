@@ -8,6 +8,17 @@ struct IntVector2
 	int x = 0;
 	int y = 0;
 
+	IntVector2 operator+(IntVector2 other) const
+	{
+		return { x + other.x, y + other.y };
+	}
+
+
+	IntVector2 operator-(IntVector2 other) const
+	{
+		return { x - other.x, y - other.y };
+	}
+
 	IntVector2 operator*(int other) const
 	{
 		return { x * other, y * other };

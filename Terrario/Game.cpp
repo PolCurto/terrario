@@ -42,10 +42,11 @@ Game::Game(Engine& engine)
 		level1->entities.push_back(camera_ent);
 	}
 
-	tile_system.CreateTilesArray();
+	activeScene = level1;
+
+	tile_system.CreateTilesArray(engine, *activeScene);
 	tile_system.tiles_texture = engine.renderer.LoadTexture("Textures/tiles.png");
 
-	activeScene = level1;
 }
 
 Game::~Game()

@@ -51,6 +51,8 @@
     <ClCompile Include="Raycast.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="TreeComponent.cpp" />
+    <ClCompile Include="RandomGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -98,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="Raycast.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomGen.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

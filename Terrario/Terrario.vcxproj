@@ -142,12 +142,14 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Inputs.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RandomGen.cpp" />
     <ClCompile Include="Raycast.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RendererComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TileSystem.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TreeComponent.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,12 +163,14 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Inputs.h" />
     <ClInclude Include="IntVector2.h" />
+    <ClInclude Include="RandomGen.h" />
     <ClInclude Include="Raycast.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RendererComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TileSystem.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TreeComponent.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

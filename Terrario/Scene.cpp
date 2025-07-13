@@ -20,3 +20,8 @@ void Scene::Update(Engine& engine, Game& game)
 		ent->Update(engine, game);
 	}
 }
+
+void Scene::AddEntity(Entity* new_entity)
+{
+	entities.push_back(new_entity);
+}

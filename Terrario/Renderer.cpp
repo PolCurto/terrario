@@ -83,8 +83,8 @@ void Renderer::RenderTexture(SDL_Texture* texture, const SDL_FRect& source, cons
 	SDL_FRect newRect = destination;
 
 	// Move according to the camera
-	newRect.x = destination.x - camera->GetPosition().x * parallaxFactor + static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / 2;
-	newRect.y = destination.y - camera->GetPosition().y * parallaxFactor + static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / 2;
+	newRect.x = std::floorf(destination.x) - std::floorf(camera->GetPosition().x) * parallaxFactor + Globals::RENDER_TEXTURE_WIDTH / 2.0f;
+	newRect.y = std::floorf(destination.y) - std::floorf(camera->GetPosition().y) * parallaxFactor + Globals::RENDER_TEXTURE_HEIGHT / 2.0f;
 
 	SDL_RenderTexture(sdl_renderer, texture, &source, &newRect);
 }
@@ -99,6 +99,8 @@ SDL_Texture* Renderer::LoadTexture(const char* filepath) const
 {
 	SDL_Texture* new_tex = IMG_LoadTexture(sdl_renderer, filepath);
 	if (!new_tex) std::cerr << "Error when loading texture " << filepath << ": " << SDL_GetError() << std::endl;
+
+	SDL_SetTextureScaleMode(new_tex, SDL_SCALEMODE_NEAREST);
 
 	return new_tex;
 }

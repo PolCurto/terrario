@@ -9,6 +9,7 @@
 #include <random>
 #include <vector>
 
+struct Scene;
 struct SDL_Texture;
 
 constexpr int TILEMAP_WIDTH = 8400;
@@ -20,7 +21,8 @@ enum class TileType : uint8_t
 {
 	Empty = 0,
 	Dirt,
-	Tree,
+	Trunk,
+	Leaves,
 	Rock,
 	Copper,
 	Silver,
@@ -31,16 +33,15 @@ enum class TileType : uint8_t
 struct Tile
 {
 	Vector2 world_pos{};
-	float elapsed_time = 0;
 	bool active = false;
 	TileType type = TileType::Empty;
 };
 
 struct TileSystem
 {
-	TileSystem();
+	TileSystem() = default;
 
-	void CreateTilesArray();
+	void CreateTilesArray(Engine& engine, Scene& active_scene);
 	void DeleteTilesArray();
 	void Update(Engine& engine);
 
@@ -49,7 +50,7 @@ struct TileSystem
 	void PlaceTile(float x, float y, const Engine& engine);
 
 	// This assumes x and y are 0,0 in the center of the srceen
-	inline void ScreenToTilePos(int* x, int* y, const Engine& engine) const
+	void ScreenToTilePos(int* x, int* y, const Engine& engine) const
 	{
 		float x_ratio = static_cast<float>(Globals::RENDER_TEXTURE_WIDTH) / static_cast<float>(engine.window.width);
 		float y_ratio = static_cast<float>(Globals::RENDER_TEXTURE_HEIGHT) / static_cast<float>(engine.window.height);
@@ -67,18 +68,18 @@ struct TileSystem
 		*y = static_cast<int>(std::floor(new_y));
 	}
 
-	inline void WorldToTilePos(int* x, int* y) const
+	void WorldToTilePos(int* x, int* y) const
 	{
 		*x = static_cast<int>((*x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE);
 		*y = static_cast<int>((*y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE);
 	}
-	inline void WorldToTilePos(float* x, float* y) const
+	void WorldToTilePos(float* x, float* y) const
 	{
 		*x = (*x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE;
 		*y = (*y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE;
 	}
 
-	inline bool IsTile(int x, int y) const
+	bool IsTile(int x, int y) const
 	{
 		// Check bounds
 		if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT) return false;
@@ -86,19 +87,21 @@ struct TileSystem
 		if (tilemap[TILEMAP_WIDTH * y + x].type != TileType::Empty) return true;
 		else return false;
 	}
+
+	void SetTile(int x, int y, TileType type)
+	{
+		if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT) return;
+		tilemap[TILEMAP_WIDTH * y + x].type = type;
+	}
 	
-	Tile* tilemap = nullptr;
 	SDL_Texture* tiles_texture = nullptr;
 
-	std::vector<IntVector2> always_update_tiles;
+private:
+	Tile* tilemap = nullptr;
 
 	// TODO: To avoid looping through all tiles, more arrays could be created, as well as chunks
 	// Render -> Only visible tiles
 	// Update -> Only tiles more or less close to the player, but not neccesarily visible
-	// There are some tiles, like trees, which shuld be always updated. For this I could have an array of always_update_tiles and go through it, because not a lot should be there
 
 	// Trees prob should be entities, which have its tiles as params, but things like elapsed time goes into the entity to reduce tile size. Also with things like crops, furniture, etc.
-
-	std::mt19937 rng;
-	std::uniform_real_distribution<float> dist;
 };
