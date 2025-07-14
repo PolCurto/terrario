@@ -47,6 +47,7 @@ Game::Game(Engine& engine)
 	tile_system.CreateTilesArray(engine, *activeScene);
 	tile_system.tiles_texture = engine.renderer.LoadTexture("Textures/tiles.png");
 
+	item_system.InitItemRegistry();
 }
 
 Game::~Game()

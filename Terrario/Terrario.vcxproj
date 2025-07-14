@@ -141,6 +141,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Inputs.cpp" />
+    <ClCompile Include="ItemSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RandomGen.cpp" />
     <ClCompile Include="Raycast.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Inputs.h" />
     <ClInclude Include="IntVector2.h" />
+    <ClInclude Include="ItemSystem.h" />
     <ClInclude Include="RandomGen.h" />
     <ClInclude Include="Raycast.h" />
     <ClInclude Include="Renderer.h" />

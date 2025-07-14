@@ -265,11 +265,11 @@ void TileSystem::DestroyTile(float x, float y, const Engine& engine)
     tilemap[TILEMAP_WIDTH * iy + ix].type = TileType::Empty;
 }
 
-void TileSystem::PlaceTile(float x, float y, const Engine& engine)
+void TileSystem::PlaceTile(float x, float y, const Engine& engine, TileType type)
 {
     int ix = static_cast<int>(x);
     int iy = static_cast<int>(y);
     ScreenToTilePos(&ix, &iy, engine);
 
-    tilemap[TILEMAP_WIDTH * iy + ix].type = TileType::Dirt;
+    tilemap[TILEMAP_WIDTH * iy + ix].type = type;
 }

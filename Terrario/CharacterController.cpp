@@ -97,7 +97,7 @@ void CharacterController::Update(Engine& engine, Game& game)
 	}
 	else if (engine.inputs.mouse_buttons[MouseButtons::Right] == KeyState::Down)
 	{
-		game.tile_system.PlaceTile(mouse.x, mouse.y, engine);
+		game.tile_system.PlaceTile(mouse.x, mouse.y, engine, TileType::Dirt);
 	}
 }
 

@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Archivos de encabezado">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{152e636f-199d-409f-af11-cc0b712b792e}</UniqueIdentifier>
     </Filter>
@@ -51,8 +47,13 @@
     <ClCompile Include="Raycast.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="TreeComponent.cpp" />
-    <ClCompile Include="RandomGen.cpp" />
+    <ClCompile Include="RandomGen.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -107,5 +108,6 @@
     <ClInclude Include="RandomGen.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="ItemSystem.h" />
   </ItemGroup>
 </Project>

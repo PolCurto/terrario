@@ -45,7 +45,7 @@ struct TileSystem
 
 	bool CheckForTiles(const Vector2& pos, const Vector2& size) const;
 	void DestroyTile(float x, float y, const Engine& engine);
-	void PlaceTile(float x, float y, const Engine& engine);
+	void PlaceTile(float x, float y, const Engine& engine, TileType type);
 
 	// This assumes x and y are 0,0 in the center of the screen
 	void ScreenToTilePos(int* x, int* y, const Engine& engine) const

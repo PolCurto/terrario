@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TileSystem.h"
+#include "ItemSystem.h"
 
 #include <vector>
 
@@ -15,6 +16,7 @@ struct Game
 	void Update(Engine& engine);
 
 	TileSystem tile_system{};
+	ItemSystem item_system{};
 	std::vector<Scene*> scenes{};
 	Scene* activeScene = nullptr;
 };
