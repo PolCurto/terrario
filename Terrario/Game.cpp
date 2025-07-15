@@ -23,6 +23,7 @@ Game::Game(Engine& engine)
 
 		CharacterController* ch = new CharacterController();
 		ch->entity = player;
+		ch->Init();
 		player->AddComponent(ch);
 
 		Entity* camera_ent = new Entity();

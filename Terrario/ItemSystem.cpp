@@ -1,5 +1,7 @@
 #include "ItemSystem.h"
+
 #include "TileSystem.h"
+#include "IntVector2.h"
 
 void ItemSystem::InitItemRegistry()
 {
@@ -71,7 +73,7 @@ void ItemSystem::InitItemRegistry()
 		ItemData item_data;
 		item_data.name = "Wood";
 		item_data.placeable_component = static_cast<uint8_t>(TileType::Trunk);
-		items_registry[ItemId::DirtTile] = item_data;
+		items_registry[ItemId::WoodTile] = item_data;
 	}
 
 	// Rock
@@ -79,6 +81,38 @@ void ItemSystem::InitItemRegistry()
 		ItemData item_data;
 		item_data.name = "Rock";
 		item_data.placeable_component = static_cast<uint8_t>(TileType::Rock);
-		items_registry[ItemId::DirtTile] = item_data;
+		items_registry[ItemId::RockTile] = item_data;
+	}
+}
+
+void ItemSystem::OnLeftClick(Item& item, TileSystem& tile_system, const IntVector2& mouse_pos)
+{
+	ItemData& current_item = items_registry[item.id];
+
+	if (current_item.break_component.has_value())
+	{
+		// Destroy tiles
+
+		// TODO: It should be repeatedly damaged until it breaks
+		tile_system.DestroyTile(mouse_pos.x, mouse_pos.y);
+	}
+	if (current_item.attack_component.has_value())
+	{
+		// Attack
+	}
+}
+
+void ItemSystem::OnRightClick(Item& item, TileSystem& tile_system, const IntVector2& mouse_pos)
+{
+	ItemData& current_item = items_registry[item.id];
+
+	if (current_item.usable_component.has_value())
+	{
+		current_item.usable_component.value().function(item);
+	}
+	if (current_item.placeable_component.has_value())
+	{
+		tile_system.PlaceTile(mouse_pos.x, mouse_pos.y, static_cast<TileType>(current_item.placeable_component.value().tile_type));
+		item.amount -= 1;
 	}
 }

@@ -4,6 +4,9 @@
 #include <optional>
 #include <functional>
 
+struct TileSystem;
+struct IntVector2;
+
 enum class ItemId
 {
 	WoodenSword = 0,
@@ -11,7 +14,9 @@ enum class ItemId
 	WoodenAxe,
 	DirtTile,
 	WoodTile,
-	RockTile
+	RockTile,
+
+	Empty
 };
 
 struct Item
@@ -56,6 +61,8 @@ struct ItemData
 struct ItemSystem
 {
 	void InitItemRegistry();
+	void OnLeftClick(Item& item, TileSystem& tile_system, const IntVector2& mouse_pos);
+	void OnRightClick(Item& item, TileSystem& tile_system, const IntVector2& mouse_pos);
 
 	std::unordered_map<ItemId, ItemData> items_registry;
 };

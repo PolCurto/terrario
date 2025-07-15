@@ -11,8 +11,8 @@ bool Raycast::ThrowTilesRay(const Vector2& start_pos, const Vector2& end_pos, co
 	Vector2 end = end_pos;
 
 	// Assumes x and y are in world pos, and must be converted to tile pos
-	tile_system.WorldToTilePos(&start.x, &start.y);
-	tile_system.WorldToTilePos(&end.x, &end.y);
+	TileUtils::WorldToTilePos(start.x, start.y);
+	TileUtils::WorldToTilePos(end.x, end.y);
 
 
 	const int x0 = static_cast<int>(std::floor(start.x));

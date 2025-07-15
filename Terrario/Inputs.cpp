@@ -40,8 +40,8 @@ bool Inputs::Update(Window& window)
 			return false;
 			break;
 		case SDL_EVENT_MOUSE_MOTION:
-			mouse_pos.x = static_cast<float>(event.motion.x);
-			mouse_pos.y = static_cast<float>(event.motion.y);
+			mouse_pos.x = event.motion.x;
+			mouse_pos.y = event.motion.y;
 			break;
 		case SDL_EVENT_MOUSE_BUTTON_DOWN:
 			mouse_buttons[event.button.button - 1] = KeyState::Down;

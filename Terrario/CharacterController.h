@@ -2,6 +2,9 @@
 
 #include "IComponent.h"
 #include "Entity.h"
+#include "ItemSystem.h"
+
+#include <array>
 
 struct Game;
 
@@ -20,4 +23,7 @@ struct CharacterController : IComponent
 	Vector2 speed{};
 
 	bool debug_mode = false;
+
+	int inventory_index = 0;
+	std::array<Item, 5> inventory;
 };

@@ -157,8 +157,8 @@ void TileSystem::Update(Engine& engine)
 
     int tilesRendered = 0;
     
-    WorldToTilePos(&x_upper_bound, &y_upper_bound);
-    WorldToTilePos(&x_lower_bound, &y_lower_bound);
+    TileUtils::WorldToTilePos(x_upper_bound, y_upper_bound);
+    TileUtils::WorldToTilePos(x_lower_bound, y_lower_bound);
 
     // + 1 to avoid not rendering in border (float to int type o sht)
     ++x_upper_bound;
@@ -225,7 +225,7 @@ void TileSystem::Update(Engine& engine)
 bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size) const
 {
     Vector2 tiles_pos = pos;
-    WorldToTilePos(&tiles_pos.x, &tiles_pos.y);
+    TileUtils::WorldToTilePos(tiles_pos.x, tiles_pos.y);
 
     if (tiles_pos.x < 0 || tiles_pos.x >= TILEMAP_WIDTH || tiles_pos.y < 0 || tiles_pos.y >= TILEMAP_HEIGHT) return false;
 
@@ -256,20 +256,24 @@ bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size) const
     return false;
 }
 
-void TileSystem::DestroyTile(float x, float y, const Engine& engine)
+void TileSystem::DestroyTile(int x, int y)
 {
-    int ix = static_cast<int>(x);
-    int iy = static_cast<int>(y);
-    ScreenToTilePos(&ix, &iy, engine);
+    // This assumes x and y are converted to tile space
 
-    tilemap[TILEMAP_WIDTH * iy + ix].type = TileType::Empty;
+    // Check bounds
+    if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT) return;
+
+
+    // Dropt tile item
+
+    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
 }
 
-void TileSystem::PlaceTile(float x, float y, const Engine& engine, TileType type)
+void TileSystem::PlaceTile(int x, int y, TileType type)
 {
-    int ix = static_cast<int>(x);
-    int iy = static_cast<int>(y);
-    ScreenToTilePos(&ix, &iy, engine);
+    // This assumes x and y are converted to tile space
 
-    tilemap[TILEMAP_WIDTH * iy + ix].type = type;
+    // Check bounds and if tile is empty
+    if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT || tilemap[TILEMAP_WIDTH * y + x].type != TileType::Empty) return;
+    tilemap[TILEMAP_WIDTH * y + x].type = type;
 }

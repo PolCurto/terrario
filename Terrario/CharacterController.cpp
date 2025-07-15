@@ -15,6 +15,18 @@ constexpr float GRAVITY = 1500.0f;
 bool CharacterController::Init()
 {
 	current_speed = DEFUALT_SPEED;
+
+	// ITEMS TESTING
+	Item dirt_tile;
+	dirt_tile.amount = 5;
+	dirt_tile.id = ItemId::DirtTile;
+	inventory[0] = dirt_tile;
+
+	Item pickaxe;
+	pickaxe.amount = 1;
+	pickaxe.id = ItemId::WoodenPickaxe;
+	inventory[1] = pickaxe;
+
 	return true;
 }
 
@@ -22,6 +34,9 @@ void CharacterController::Update(Engine& engine, Game& game)
 {
 	Vector2 desired_position{};
 	speed.x = 0;
+
+	bool lmb = false;
+	bool rmb = false;
 
 	// Get inputs
 	if (engine.inputs.keyboard[SDL_SCANCODE_LSHIFT] == KeyState::Down)
@@ -42,10 +57,25 @@ void CharacterController::Update(Engine& engine, Game& game)
 		speed.x += current_speed;
 	}
 
+	if (engine.inputs.mouse_buttons[0] == KeyState::Down)
+	{
+		lmb = true;
+	}
+	if (engine.inputs.mouse_buttons[2] == KeyState::Down)
+	{
+		rmb = true;
+	}
+
 	if (engine.inputs.keyboard[SDL_SCANCODE_SPACE] == KeyState::Down)
 	{
 		speed.y = -500.0f;
 	}
+
+	if (engine.inputs.keyboard[SDL_SCANCODE_1] == KeyState::Down) inventory_index = 0;
+	if (engine.inputs.keyboard[SDL_SCANCODE_2] == KeyState::Down) inventory_index = 1;
+	if (engine.inputs.keyboard[SDL_SCANCODE_3] == KeyState::Down) inventory_index = 2;
+	if (engine.inputs.keyboard[SDL_SCANCODE_4] == KeyState::Down) inventory_index = 3;
+	if (engine.inputs.keyboard[SDL_SCANCODE_5] == KeyState::Down) inventory_index = 4;
 
 	if (engine.inputs.keyboard[SDL_SCANCODE_F1] == KeyState::Down)
 	{
@@ -81,23 +111,34 @@ void CharacterController::Update(Engine& engine, Game& game)
 
 		engine.renderer.RenderDebugText("Pos: " + std::to_string(entity->position.x) + " " + std::to_string(entity->position.y), entity->position - engine.renderer.GetCameraPos() + 
 		Vector2(Globals::RENDER_TEXTURE_WIDTH / 2.0f, Globals::RENDER_TEXTURE_HEIGHT / 2.0f) - Vector2(100.0f, 50.0f));
+
+		engine.renderer.RenderDebugText("Inventory index: " + std::to_string(inventory_index + 1), {1700.0f, 100.0f});
+		engine.renderer.RenderDebugText("1. " + game.item_system.items_registry[inventory[0].id].name + " - " + std::to_string(inventory[0].amount), { 1700.0f, 120.0f});
+		engine.renderer.RenderDebugText("2. " + game.item_system.items_registry[inventory[1].id].name + " - " + std::to_string(inventory[1].amount), { 1700.0f, 140.0f });
+		engine.renderer.RenderDebugText("3. " + game.item_system.items_registry[inventory[2].id].name + " - " + std::to_string(inventory[2].amount), { 1700.0f, 160.0f });
+		engine.renderer.RenderDebugText("4. " + game.item_system.items_registry[inventory[3].id].name + " - " + std::to_string(inventory[3].amount), { 1700.0f, 180.0f });
+		engine.renderer.RenderDebugText("5. " + game.item_system.items_registry[inventory[4].id].name + " - " + std::to_string(inventory[4].amount), { 1700.0f, 200.0f });
 	}
 
 	if (!is_grounded) speed.y += GRAVITY * (engine.timer.delta_time / 1000.0f);
 
-	// TODO: All this will be replaced and depending on the item at hand, this is for testing
-	Vector2 mouse;
 
-	mouse.x = engine.inputs.mouse_pos.x - engine.window.width / 2.0f;
-	mouse.y = engine.inputs.mouse_pos.y - engine.window.height / 2.0f;
+	if (lmb || rmb)
+	{
+		IntVector2 mouse;
+		mouse.x = engine.inputs.mouse_pos.x - engine.window.width / 2.0f;
+		mouse.y = engine.inputs.mouse_pos.y - engine.window.height / 2.0f;
 
-	if (engine.inputs.mouse_buttons[MouseButtons::Left] == KeyState::Down)
-	{
-		game.tile_system.DestroyTile(mouse.x, mouse.y, engine);
-	}
-	else if (engine.inputs.mouse_buttons[MouseButtons::Right] == KeyState::Down)
-	{
-		game.tile_system.PlaceTile(mouse.x, mouse.y, engine, TileType::Dirt);
+		TileUtils::ScreenToTilePos(mouse.x, mouse.y, engine);
+
+		// TODO: Other logic will take place on click even if no object, and prioritized, like opening a door or talking to npcs
+
+		if (inventory[inventory_index].id == ItemId::Empty) return;
+
+		if (lmb) game.item_system.OnLeftClick(inventory[inventory_index], game.tile_system, mouse);
+		else game.item_system.OnRightClick(inventory[inventory_index], game.tile_system, mouse);
+
+		if (inventory[inventory_index].amount == 0) inventory[inventory_index].id = ItemId::Empty;
 	}
 }
 
