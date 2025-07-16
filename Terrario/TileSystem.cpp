@@ -1,11 +1,12 @@
 #include "TileSystem.h"
 
-#include "Engine.h"
 #include "Scene.h"
 
 #include "Entity.h"
 #include "RandomGen.h"
+#include "ItemComponent.h"
 #include "TreeComponent.h"
+#include "RendererComponent.h"
 
 #include "SDL3/SDL_rect.h"
 
@@ -84,7 +85,7 @@ void TileSystem::CreateTilesArray(Engine& engine, Scene& active_scene)
     // Ore propagation
     for (const IntVector2& pos : ores_pos)
     {
-        int expansion = std::floor(engine.random.RandomIntRange(5, 30));
+        int expansion = engine.random.RandomIntRange(5, 30);
         TileType current_type = tilemap[TILEMAP_WIDTH * pos.y + pos.x].type;
 
         for (int i = 0; i < expansion; ++i)
@@ -256,17 +257,35 @@ bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size) const
     return false;
 }
 
-void TileSystem::DestroyTile(int x, int y)
+void TileSystem::DestroyTile(int x, int y, Scene& active_scene)
 {
     // This assumes x and y are converted to tile space
 
     // Check bounds
     if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT) return;
 
-
-    // Dropt tile item
-
     tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
+
+    // Drop tile item
+    Entity* tile_item = new Entity();
+    ItemComponent* item_comp = new ItemComponent();
+    item_comp->item_id = ItemId::DirtTile;
+    item_comp->entity = tile_item;
+
+    RendererComponent* render_comp = new RendererComponent();
+    render_comp->texture = tiles_texture;
+    render_comp->entity = tile_item;
+    render_comp->tex_src = { 32.0f * 2, 32.0f * 4, 32.0f, 32.0f };
+
+    tile_item->AddComponent(render_comp);
+    tile_item->AddComponent(item_comp);
+
+    TileUtils::TileToWorldPos(x, y);
+    tile_item->position = Vector2(x + 8, y + 8);
+    tile_item->size = Vector2(16.0f, 16.0f);
+
+    // This must be added outside the update loop
+    active_scene.AddEntity(tile_item);
 }
 
 void TileSystem::PlaceTile(int x, int y, TileType type)

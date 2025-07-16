@@ -17,14 +17,10 @@ bool CharacterController::Init()
 	current_speed = DEFUALT_SPEED;
 
 	// ITEMS TESTING
-	Item dirt_tile;
-	dirt_tile.amount = 5;
-	dirt_tile.id = ItemId::DirtTile;
+	Item dirt_tile(ItemId::DirtTile, 5);
 	inventory[0] = dirt_tile;
 
-	Item pickaxe;
-	pickaxe.amount = 1;
-	pickaxe.id = ItemId::WoodenPickaxe;
+	Item pickaxe(ItemId::WoodenPickaxe, 1);
 	inventory[1] = pickaxe;
 
 	return true;
@@ -57,7 +53,7 @@ void CharacterController::Update(Engine& engine, Game& game)
 		speed.x += current_speed;
 	}
 
-	if (engine.inputs.mouse_buttons[0] == KeyState::Down)
+	if (engine.inputs.mouse_buttons[0] == KeyState::Hold)
 	{
 		lmb = true;
 	}
@@ -122,12 +118,11 @@ void CharacterController::Update(Engine& engine, Game& game)
 
 	if (!is_grounded) speed.y += GRAVITY * (engine.timer.delta_time / 1000.0f);
 
-
 	if (lmb || rmb)
 	{
 		IntVector2 mouse;
-		mouse.x = engine.inputs.mouse_pos.x - engine.window.width / 2.0f;
-		mouse.y = engine.inputs.mouse_pos.y - engine.window.height / 2.0f;
+		mouse.x = static_cast<int>(engine.inputs.mouse_pos.x - engine.window.width / 2.0f);
+		mouse.y = static_cast<int>(engine.inputs.mouse_pos.y - engine.window.height / 2.0f);
 
 		TileUtils::ScreenToTilePos(mouse.x, mouse.y, engine);
 
@@ -135,7 +130,7 @@ void CharacterController::Update(Engine& engine, Game& game)
 
 		if (inventory[inventory_index].id == ItemId::Empty) return;
 
-		if (lmb) game.item_system.OnLeftClick(inventory[inventory_index], game.tile_system, mouse);
+		if (lmb) game.item_system.OnLeftClick(inventory[inventory_index], game, mouse);
 		else game.item_system.OnRightClick(inventory[inventory_index], game.tile_system, mouse);
 
 		if (inventory[inventory_index].amount == 0) inventory[inventory_index].id = ItemId::Empty;
@@ -145,4 +140,23 @@ void CharacterController::Update(Engine& engine, Game& game)
 bool CharacterController::Close()
 {
 	return true;
+}
+
+void CharacterController::AddItem(ItemId item_id)
+{
+	// TODO: Search for if item already exist, and add it
+
+	int empty_index = -1;
+
+	for (int i = 0; i < inventory.max_size(); ++i)
+	{
+		if (inventory[i].id == ItemId::Empty) empty_index = i;
+		else if (inventory[i].id == item_id)
+		{
+			++inventory[i].amount;
+			return;
+		}
+	}
+
+	if (empty_index >= 0) inventory[empty_index] = { item_id, 1 };
 }

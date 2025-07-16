@@ -15,6 +15,7 @@ struct CharacterController : IComponent
 	bool Close() override;
 
 	void SetEntity(Entity* parent) { entity = parent; }
+	void AddItem(ItemId item_id);
 
 	Entity* entity = nullptr;
 

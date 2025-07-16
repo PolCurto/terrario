@@ -3,7 +3,6 @@
 #include "Vector2.h"
 #include "IntVector2.h"
 #include "Globals.h"
-#include "Window.h"
 #include "Engine.h"
 
 #include <random>
@@ -44,7 +43,7 @@ struct TileSystem
 	void Update(Engine& engine);
 
 	bool CheckForTiles(const Vector2& pos, const Vector2& size) const;
-	void DestroyTile(int x, int y);
+	void DestroyTile(int x, int y, Scene& active_scene);
 	void PlaceTile(int x, int y, TileType type);
 
 	bool IsTile(int x, int y) const
@@ -104,5 +103,11 @@ namespace TileUtils
 	{
 		x = (x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE;
 		y = (y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE;
+	}
+
+	inline void TileToWorldPos(int& x, int& y)
+	{
+		x = x * TILE_SIZE - TILEMAP_WIDTH * (TILE_SIZE * 0.5f);
+		y = y * TILE_SIZE - TILEMAP_HEIGHT * (TILE_SIZE * 0.5f);
 	}
 }

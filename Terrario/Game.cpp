@@ -15,10 +15,12 @@ Game::Game(Engine& engine)
 	/* Player */
 	{
 		Entity* player = new Entity("Player", nullptr, { 5.0f, -50.0f }, { 24.0f, 48.0f });
-	
+		level1->player = player;
+
 		RendererComponent* rc = new RendererComponent();
 		rc->entity = player;
 		rc->texture = engine.renderer.LoadTexture("Textures/playersprite.png");
+		rc->tex_src = { 0.0f, 0.0f, 32.0f, 64.0f };
 		player->AddComponent(rc);
 
 		CharacterController* ch = new CharacterController();
@@ -55,6 +57,7 @@ Game::~Game()
 {
 	for (Scene* scene : scenes)
 	{
+		scene->Unload();
 		delete scene;
 	}
 	scenes.clear();

@@ -1,6 +1,6 @@
 #include "ItemSystem.h"
 
-#include "TileSystem.h"
+#include "Game.h"
 #include "IntVector2.h"
 
 void ItemSystem::InitItemRegistry()
@@ -31,12 +31,7 @@ void ItemSystem::InitItemRegistry()
 	{
 		ItemData item_data;
 		item_data.name = "Wooden Pickaxe";
-		item_data.usable_component = {
-			[](Item& item)
-			{
-				item.amount -= 2;
-			}
-		};
+		item_data.break_component = 1;
 		items_registry[ItemId::WoodenPickaxe] = item_data;
 	}
 
@@ -85,7 +80,7 @@ void ItemSystem::InitItemRegistry()
 	}
 }
 
-void ItemSystem::OnLeftClick(Item& item, TileSystem& tile_system, const IntVector2& mouse_pos)
+void ItemSystem::OnLeftClick(Item& item, Game& game, const IntVector2& mouse_pos)
 {
 	ItemData& current_item = items_registry[item.id];
 
@@ -94,7 +89,7 @@ void ItemSystem::OnLeftClick(Item& item, TileSystem& tile_system, const IntVecto
 		// Destroy tiles
 
 		// TODO: It should be repeatedly damaged until it breaks
-		tile_system.DestroyTile(mouse_pos.x, mouse_pos.y);
+		game.tile_system.DestroyTile(mouse_pos.x, mouse_pos.y, *game.activeScene);
 	}
 	if (current_item.attack_component.has_value())
 	{

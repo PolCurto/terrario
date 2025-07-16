@@ -54,6 +54,9 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="ItemSystem.cpp" />
+    <ClCompile Include="ItemComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -109,5 +112,8 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="ItemSystem.h" />
+    <ClInclude Include="ItemComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

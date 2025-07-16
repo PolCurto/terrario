@@ -16,5 +16,5 @@ struct CameraController : IComponent
 	bool debug_mode = false;
 	bool is_fast = false;
 
-	Entity* target;
+	Entity* target = nullptr;
 };

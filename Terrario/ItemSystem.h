@@ -4,6 +4,7 @@
 #include <optional>
 #include <functional>
 
+struct Game;
 struct TileSystem;
 struct IntVector2;
 
@@ -21,13 +22,15 @@ enum class ItemId
 
 struct Item
 {
+	Item() = default;
+	Item(ItemId n_id, int n_amount) : id(n_id), amount(n_amount) {};
 	ItemId id;
 	int amount;
 };
 
 struct UsableComponent
 {
-	UsableComponent(std::function<void(Item& item)> func) : function(func) {};
+	UsableComponent(std::function<void(Item& item)> func) : function(func) {}
 	std::function<void(Item& item)> function;
 };
 
@@ -40,12 +43,13 @@ struct AttackComponent
 // Component for breaking tiles
 struct BreakComponent
 {
+	BreakComponent(int speed) : break_speed(speed) {}
 	int break_speed;
 };
 
 struct PlaceableComponent
 {
-	PlaceableComponent(uint8_t tile) : tile_type(tile) {};
+	PlaceableComponent(uint8_t tile) : tile_type(tile) {}
 	uint8_t tile_type;
 };
 
@@ -61,7 +65,7 @@ struct ItemData
 struct ItemSystem
 {
 	void InitItemRegistry();
-	void OnLeftClick(Item& item, TileSystem& tile_system, const IntVector2& mouse_pos);
+	void OnLeftClick(Item& item, Game& game, const IntVector2& mouse_pos);
 	void OnRightClick(Item& item, TileSystem& tile_system, const IntVector2& mouse_pos);
 
 	std::unordered_map<ItemId, ItemData> items_registry;
