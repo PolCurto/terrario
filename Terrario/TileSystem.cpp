@@ -9,6 +9,7 @@
 #include "RendererComponent.h"
 
 #include "SDL3/SDL_rect.h"
+#include <cassert>
 
 void TileSystem::CreateTilesArray(Engine& engine, Scene& active_scene)
 {
@@ -262,26 +263,29 @@ void TileSystem::DestroyTile(int x, int y, Scene& active_scene)
     // This assumes x and y are converted to tile space
 
     // Check bounds
-    if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT) return;
+    if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT || tilemap[TILEMAP_WIDTH * y + x].type == TileType::Empty) return;
 
-    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
-
-    // Drop tile item
     Entity* tile_item = new Entity();
     ItemComponent* item_comp = new ItemComponent();
-    item_comp->item_id = ItemId::DirtTile;
+
+    const ItemId item_id = ItemUtils::TileToItemId(tilemap[TILEMAP_WIDTH * y + x].type);
+    assert(item_comp->item_id != ItemId::Empty);     // If empty, something has gone wrong
+
+    item_comp->item_id = item_id;
     item_comp->entity = tile_item;
+
+    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
 
     RendererComponent* render_comp = new RendererComponent();
     render_comp->texture = tiles_texture;
     render_comp->entity = tile_item;
-    render_comp->tex_src = { 32.0f * 2, 32.0f * 4, 32.0f, 32.0f };
+    render_comp->texture_area = ItemUtils::ItemIdToTextureArea(item_id);
 
     tile_item->AddComponent(render_comp);
     tile_item->AddComponent(item_comp);
 
     TileUtils::TileToWorldPos(x, y);
-    tile_item->position = Vector2(x + 8, y + 8);
+    tile_item->position = Vector2(x + 8.0f, y + 8.0f);
     tile_item->size = Vector2(16.0f, 16.0f);
 
     // This must be added outside the update loop

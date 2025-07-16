@@ -22,7 +22,7 @@ void RendererComponent::Update(Engine& engine, Game& game)
 	rectangle.h = entity->size.y;
 
 	//TODO: remove SDL_Frect tyoe from here, pass to the render function the position and widht/height (We will see if that fits with textures)
-	engine.renderer.RenderTexture(texture, tex_src, rectangle, parallaxFactor);
+	engine.renderer.RenderTexture(texture, texture_area, rectangle, parallaxFactor);
 }
 
 bool RendererComponent::Close()

@@ -111,3 +111,77 @@ void ItemSystem::OnRightClick(Item& item, TileSystem& tile_system, const IntVect
 		item.amount -= 1;
 	}
 }
+
+
+ItemId ItemUtils::TileToItemId(const TileType& tile)
+{
+	switch (tile)
+	{
+	case TileType::Dirt: 
+		return ItemId::DirtTile; 
+		break;
+
+	case TileType::Trunk:
+		return ItemId::WoodTile;
+		break;
+
+	case TileType::Rock:
+		return ItemId::RockTile;
+		break;
+
+	case TileType::Copper:
+		return ItemId::CopperOre;
+		break;
+
+	case TileType::Silver:
+		return ItemId::SilverOre;
+		break;
+
+	case TileType::Gold:
+		return ItemId::GoldenOre;
+		break;
+
+	default:
+		return ItemId::Empty;
+		break;
+	}
+}
+
+SDL_FRect ItemUtils::ItemIdToTextureArea(const ItemId item)
+{
+	switch (item)
+	{
+	case ItemId::DirtTile:
+		return { 32.0f, 128.0f, 32.0f, 32.0f };
+		break;
+
+	case ItemId::WoodTile:
+		return { 256.0f, 128.0f, 32.0f, 32.0f };
+		break;
+
+	case ItemId::RockTile:
+		return { 96.0f, 128.0f, 32.0f, 32.0f };
+		break;
+
+	case ItemId::WoodenSword:
+		break;
+
+	case ItemId::WoodenPickaxe:
+		break;
+
+	case ItemId::WoodenAxe:
+		break;
+
+	case ItemId::CopperOre:
+		return { 416.0f, 128.0f, 32.0f, 32.0f };
+		break;
+
+	case ItemId::SilverOre:
+		return { 448.0f, 128.0f, 32.0f, 32.0f };
+		break;
+
+	case ItemId::GoldenOre:
+		return { 480.0f, 128.0f, 32.0f, 32.0f };
+		break;
+	}
+}

@@ -19,6 +19,7 @@ constexpr int TILE_SIZE = 16;
 enum class TileType : uint8_t
 {
 	Empty = 0,
+
 	Dirt,
 	Trunk,
 	Leaves,
@@ -96,9 +97,10 @@ namespace TileUtils
 
 	inline void WorldToTilePos(int& x, int& y)
 	{
-		x = static_cast<int>((x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE);
-		y = static_cast<int>((y + TILEMAP_HEIGHT * (TILE_SIZE * 0.5f)) / TILE_SIZE);
+		x = (x + TILEMAP_WIDTH * (TILE_SIZE / 2)) / TILE_SIZE;
+		y = (y + TILEMAP_HEIGHT * (TILE_SIZE / 2)) / TILE_SIZE;
 	}
+
 	inline void WorldToTilePos(float& x, float& y)
 	{
 		x = (x + TILEMAP_WIDTH * (TILE_SIZE * 0.5f)) / TILE_SIZE;
@@ -107,7 +109,7 @@ namespace TileUtils
 
 	inline void TileToWorldPos(int& x, int& y)
 	{
-		x = x * TILE_SIZE - TILEMAP_WIDTH * (TILE_SIZE * 0.5f);
-		y = y * TILE_SIZE - TILEMAP_HEIGHT * (TILE_SIZE * 0.5f);
+		x = x * TILE_SIZE - TILEMAP_WIDTH * (TILE_SIZE / 2);
+		y = y * TILE_SIZE - TILEMAP_HEIGHT * (TILE_SIZE / 2);
 	}
 }

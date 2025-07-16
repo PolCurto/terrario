@@ -20,7 +20,7 @@ Game::Game(Engine& engine)
 		RendererComponent* rc = new RendererComponent();
 		rc->entity = player;
 		rc->texture = engine.renderer.LoadTexture("Textures/playersprite.png");
-		rc->tex_src = { 0.0f, 0.0f, 32.0f, 64.0f };
+		rc->texture_area = { 0.0f, 0.0f, 32.0f, 64.0f };
 		player->AddComponent(rc);
 
 		CharacterController* ch = new CharacterController();

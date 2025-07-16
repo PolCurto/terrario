@@ -3,27 +3,43 @@
 #include <string>
 #include <optional>
 #include <functional>
+#include <SDL3/SDL_rect.h>
+#include <cstdint>
 
+enum class TileType : uint8_t;
 struct Game;
 struct TileSystem;
 struct IntVector2;
 
 enum class ItemId
 {
-	WoodenSword = 0,
+	Empty = 0,
+
+	// Swords
+	WoodenSword,
+
+	// Pickaxes
 	WoodenPickaxe,
+
+	// Axes
 	WoodenAxe,
+
+	// Tiles
 	DirtTile,
 	WoodTile,
 	RockTile,
 
-	Empty
+	// Ores
+	CopperOre,
+	SilverOre,
+	GoldenOre
 };
 
 struct Item
 {
 	Item() = default;
 	Item(ItemId n_id, int n_amount) : id(n_id), amount(n_amount) {};
+
 	ItemId id;
 	int amount;
 };
@@ -31,6 +47,7 @@ struct Item
 struct UsableComponent
 {
 	UsableComponent(std::function<void(Item& item)> func) : function(func) {}
+
 	std::function<void(Item& item)> function;
 };
 
@@ -44,12 +61,14 @@ struct AttackComponent
 struct BreakComponent
 {
 	BreakComponent(int speed) : break_speed(speed) {}
+
 	int break_speed;
 };
 
 struct PlaceableComponent
 {
 	PlaceableComponent(uint8_t tile) : tile_type(tile) {}
+
 	uint8_t tile_type;
 };
 
@@ -70,3 +89,9 @@ struct ItemSystem
 
 	std::unordered_map<ItemId, ItemData> items_registry;
 };
+
+namespace ItemUtils
+{
+	ItemId TileToItemId(const TileType& tile);
+	SDL_FRect ItemIdToTextureArea(const ItemId item);
+}

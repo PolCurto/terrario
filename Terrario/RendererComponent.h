@@ -17,7 +17,7 @@ struct RendererComponent : IComponent
 
 	Entity* entity = nullptr;
 	SDL_Texture* texture = nullptr;
-	SDL_FRect tex_src{};
+	SDL_FRect texture_area{};
 
 	float parallaxFactor = 1.0f;
 };

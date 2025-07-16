@@ -38,9 +38,11 @@ void TreeComponent::Update(Engine& engine, Game& game)
 
                 for (int dy = -canopy_radius; dy <= canopy_radius; ++dy) 
                 {
+                    const float fdy = static_cast<float>(dy);
                     for (int dx = -canopy_radius; dx <= canopy_radius; ++dx) 
                     {
-                        const float dist = std::sqrtf(dx * dx + dy * dy);
+                        const float fdx = static_cast<float>(dx);
+                        const float dist = std::sqrtf(dx * dx + fdy * fdy);
                         const float variation = engine.random.RandomFloatRange(-0.5f, 0.5f);
 
                         if (dist <= canopy_radius + variation) 

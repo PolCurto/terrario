@@ -17,11 +17,17 @@ bool CharacterController::Init()
 	current_speed = DEFUALT_SPEED;
 
 	// ITEMS TESTING
-	Item dirt_tile(ItemId::DirtTile, 5);
-	inventory[0] = dirt_tile;
-
 	Item pickaxe(ItemId::WoodenPickaxe, 1);
-	inventory[1] = pickaxe;
+	inventory[0] = pickaxe;
+
+	Item dirt_tile(ItemId::DirtTile, 5);
+	inventory[1] = dirt_tile;
+
+	Item wood_tile(ItemId::WoodTile, 5);
+	inventory[2] = wood_tile;
+
+	Item rock_tile(ItemId::RockTile, 5);
+	inventory[3] = rock_tile;
 
 	return true;
 }
