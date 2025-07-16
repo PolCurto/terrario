@@ -139,7 +139,10 @@ void CharacterController::Update(Engine& engine, Game& game)
 		if (lmb) game.item_system.OnLeftClick(inventory[inventory_index], game, mouse);
 		else game.item_system.OnRightClick(inventory[inventory_index], game.tile_system, mouse);
 
-		if (inventory[inventory_index].amount == 0) inventory[inventory_index].id = ItemId::Empty;
+		if (inventory[inventory_index].amount == 0)
+		{
+			inventory[inventory_index].id = ItemId::Empty;
+		}
 	}
 }
 
@@ -156,7 +159,11 @@ void CharacterController::AddItem(ItemId item_id)
 
 	for (int i = 0; i < inventory.max_size(); ++i)
 	{
-		if (inventory[i].id == ItemId::Empty) empty_index = i;
+		if (inventory[i].id == ItemId::Empty)
+		{
+			empty_index = i;
+			break;
+		}
 		else if (inventory[i].id == item_id)
 		{
 			++inventory[i].amount;

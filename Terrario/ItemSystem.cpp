@@ -67,7 +67,7 @@ void ItemSystem::InitItemRegistry()
 	{
 		ItemData item_data;
 		item_data.name = "Wood";
-		item_data.placeable_component = static_cast<uint8_t>(TileType::Trunk);
+		item_data.placeable_component = static_cast<uint8_t>(TileType::Wood);
 		items_registry[ItemId::WoodTile] = item_data;
 	}
 

@@ -23,6 +23,7 @@ enum class TileType : uint8_t
 	Dirt,
 	Trunk,
 	Leaves,
+	Wood,
 	Rock,
 	Copper,
 	Silver,

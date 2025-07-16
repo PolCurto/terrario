@@ -213,6 +213,9 @@ void TileSystem::Update(Engine& engine)
             case TileType::Leaves:
                 engine.renderer.RenderTexture(tiles_texture, { 382.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y , TILE_SIZE, TILE_SIZE }, 1.0f);
                 break;
+            case TileType::Wood:
+                engine.renderer.RenderTexture(tiles_texture, { 256.0f, 0.0f, 32.0f, 32.0f }, { world_x, world_y , TILE_SIZE, TILE_SIZE }, 1.0f);
+                break;
 
             default: 
                 --tilesRendered;
