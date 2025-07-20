@@ -7,10 +7,17 @@
 
 void ItemComponent::Update(Engine& engine, Game& game)
 {
-	if (abs(entity->position.x - game.activeScene->player->position.x) < entity->size.x &&
-		abs(entity->position.y - game.activeScene->player->position.y) < entity->size.y)
+	//Vector2 desired_position = entity->position;
+	//desired_position.y = entity->position.y + 500.0f * (engine.timer.delta_time / 1000.0f);
+	//bool collision = game.tile_system.CheckForTiles({ desired_position }, entity->size);
+	//if (!collision) entity->position = desired_position;
+
+	Entity* player = game.activeScene->player;
+	if ((entity->position.x + entity->size.x / 2 > player->position.x - player->size.x / 2 &&
+		entity->position.x - entity->size.x / 2 < player->position.x + player->size.x / 2 &&
+		entity->position.y + entity->size.y / 2 > player->position.y - player->size.y / 2 &&
+		entity->position.y - entity->size.y / 2 < player->position.y + player->size.y / 2))
 	{
-		//DebugLog("ITEM COLLISION");
 		CharacterController* player = game.activeScene->player->GetComponent<CharacterController>();
 		player->AddItem(item_id);
 		game.activeScene->RemoveEntity(entity);

@@ -125,6 +125,10 @@ ItemId ItemUtils::TileToItemId(const TileType& tile)
 		return ItemId::WoodTile;
 		break;
 
+	case TileType::Wood:
+		return ItemId::WoodTile;
+		break;
+
 	case TileType::Rock:
 		return ItemId::RockTile;
 		break;

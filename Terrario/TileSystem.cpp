@@ -244,7 +244,6 @@ bool TileSystem::CheckForTiles(const Vector2& pos, const Vector2& size) const
         static_cast<int>(std::ceilf(tiles_pos.y + size.y / TILE_SIZE * 0.5f))
     };
 
-
     for (int x = top_left.x; x < bottom_right.x; ++x)
     {
         for (int y = top_left.y; y < bottom_right.y; ++y)
@@ -268,16 +267,17 @@ void TileSystem::DestroyTile(int x, int y, Scene& active_scene)
     // Check bounds
     if (x < 0 || x >= TILEMAP_WIDTH || y < 0 || y >= TILEMAP_HEIGHT || tilemap[TILEMAP_WIDTH * y + x].type == TileType::Empty) return;
 
+    const ItemId item_id = ItemUtils::TileToItemId(tilemap[TILEMAP_WIDTH * y + x].type);
+    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
+    if (item_id == ItemId::Empty) return;    // If item ID empty, the tile leaves nothing behind
+
+
+    // Create the new item dropped from the tile
     Entity* tile_item = new Entity();
     ItemComponent* item_comp = new ItemComponent();
 
-    const ItemId item_id = ItemUtils::TileToItemId(tilemap[TILEMAP_WIDTH * y + x].type);
-    assert(item_comp->item_id != ItemId::Empty);     // If empty, something has gone wrong
-
     item_comp->item_id = item_id;
     item_comp->entity = tile_item;
-
-    tilemap[TILEMAP_WIDTH * y + x].type = TileType::Empty;
 
     RendererComponent* render_comp = new RendererComponent();
     render_comp->texture = tiles_texture;
